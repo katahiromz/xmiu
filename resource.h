@@ -31,6 +31,7 @@
 #define IDC_DO_PASTE                        1025
 #define IDC_SELECT_NEXT_OCCURRENCE          1026
 #define IDC_GO_TO_LINE                      1027
+#define IDC_DELETE_LINES                    1028
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
