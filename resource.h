@@ -46,6 +46,7 @@
 #define IDS_FILE_CHANGED_TITLE              123
 
 #define ID_HELP                             10000
+#define ID_EXIT                             10001
 #define ID_TOGGLE_FULLSCREEN                10013
 #define ID_FIND_NEXT                        10014
 #define ID_FIND_PREV                        10015

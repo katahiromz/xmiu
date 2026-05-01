@@ -5497,6 +5497,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_MOVE_CONTROL_SHIFT_NEXT:
           g_editor.moveCursor(VK_NEXT, true, true);
           break;
+        case ID_EXIT:
+          PostMessageW(hwnd, WM_CLOSE, 0, 0);
+          break;
       }
       break;
     case WM_SETCURSOR: {
