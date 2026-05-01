@@ -37,6 +37,8 @@
 #define IDC_ZOOM_IN                         1031
 #define IDC_ZOOM_OUT                        1032
 #define IDC_SELECT_ALL                      1033
+#define IDC_MOVE_UP                         1034
+#define IDC_MOVE_SELECT_UP                  1035
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
