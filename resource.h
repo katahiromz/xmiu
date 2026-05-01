@@ -35,6 +35,7 @@
 #define IDC_UPPERCASE                       1029
 #define IDC_LOWERCASE                       1030
 #define IDC_ZOOM_IN                         1031
+#define IDC_ZOOM_OUT                        1032
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
