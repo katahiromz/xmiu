@@ -5207,6 +5207,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.rollbackPadding();
           g_editor.jumpToFileEdge(false, true);
           break;
+        case IDC_ZOOM_100:
+          {
+            g_editor.updateFont(21.0f);
+            g_editor.rebuildLineStarts();
+            g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+            std::wstringstream ss;
+            ss << (int)g_editor.currentFontSize << L"px";
+            g_editor.zoomPopupText = ss.str();
+            SetTimer(hwnd, 1, 1000, NULL);
+            InvalidateRect(hwnd, NULL, FALSE);
+          }
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5851,18 +5863,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
               return 0;
             }
             break;
-          case '0':
-          case VK_NUMPAD0: {
-            g_editor.updateFont(21.0f);
-            g_editor.rebuildLineStarts();
-            g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
-            std::wstringstream ss;
-            ss << (int)g_editor.currentFontSize << L"px";
-            g_editor.zoomPopupText = ss.str();
-            SetTimer(hwnd, 1, 1000, NULL);
-            InvalidateRect(hwnd, NULL, FALSE);
-            return 0;
-          }
           default:
             break;
         }

@@ -41,6 +41,7 @@
 #define IDC_MOVE_SELECT_UP                  1035
 #define IDC_MOVE_DOWN                       1036
 #define IDC_MOVE_SELECT_DOWN                1037
+#define IDC_ZOOM_100                        1038
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
