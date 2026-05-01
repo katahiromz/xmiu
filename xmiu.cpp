@@ -5270,6 +5270,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_FORCE_INDENT:
           g_editor.indentLines(true);
           break;
+        case IDC_JUMP_TO_MATCHING_BRACKET:
+          g_editor.jumpToMatchingBracket();
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5861,9 +5864,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_KEYDOWN:
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'B':
-            g_editor.jumpToMatchingBracket();
-            return 0;
           case 'K':
             if (GetKeyState(VK_SHIFT) & 0x8000) {
               g_editor.deleteLines();
