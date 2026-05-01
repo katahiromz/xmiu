@@ -5240,6 +5240,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         g_editor.checkFileModification();
       }
     case WM_COMMAND:
+      if (g_editor.showHelpPopup && LOWORD(wParam) != ID_HELP) {
+        g_editor.showHelpPopup = false;
+        InvalidateRect(hwnd, NULL, FALSE);
+      }
       switch (LOWORD(wParam)) {
         case ID_NEW:
           g_editor.newFile();
@@ -6182,13 +6186,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   g_editor.updateTitleBar();
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
-    if (g_editor.showHelpPopup &&
-        (msg.message == WM_KEYDOWN || msg.message == WM_CHAR ||
-         msg.message == WM_LBUTTONDOWN)) {
-      if (msg.message == WM_KEYDOWN && msg.wParam == VK_F1) {
-      } else {
-        g_editor.showHelpPopup = false;
-        InvalidateRect(hwnd, NULL, FALSE);
+    if (g_editor.showHelpPopup) {
+      switch (msg.message) {
+        case WM_CHAR: case WM_LBUTTONDOWN:
+          g_editor.showHelpPopup = false;
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
       }
     }
     if (!g_editor.hFindDlg || !IsDialogMessage(g_editor.hFindDlg, &msg)) {
