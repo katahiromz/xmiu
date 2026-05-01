@@ -5149,6 +5149,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_SELECT_NEXT_OCCURRENCE:
           g_editor.selectNextOccurrence();
           break;
+        case IDC_GO_TO_LINE:
+          g_editor.showGoToDialog();
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5778,9 +5781,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'G':
-            g_editor.showGoToDialog();
-            return 0;
           case 'L':
             if (GetKeyState(VK_SHIFT) & 0x8000)
               g_editor.deleteLines();

@@ -42,6 +42,7 @@ IDR_MAINACCEL ACCELERATORS
     "X", IDC_DO_CUT, CONTROL, VIRTKEY
     "V", IDC_DO_PASTE, CONTROL, VIRTKEY
     "D", IDC_SELECT_NEXT_OCCURRENCE, CONTROL, VIRTKEY
+    "G", IDC_GO_TO_LINE, CONTROL, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////
