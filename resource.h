@@ -54,6 +54,7 @@
 #define IDC_DUPLICATE_LINES_DOWN            1048
 #define IDC_FORCE_INDENT                    1049
 #define IDC_JUMP_TO_MATCHING_BRACKET        1050
+#define IDC_DELETE_LINES                    1051
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103

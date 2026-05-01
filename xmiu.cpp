@@ -5273,6 +5273,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_JUMP_TO_MATCHING_BRACKET:
           g_editor.jumpToMatchingBracket();
           break;
+        case IDC_DELETE_LINES:
+          g_editor.deleteLines();
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5864,12 +5867,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_KEYDOWN:
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'K':
-            if (GetKeyState(VK_SHIFT) & 0x8000) {
-              g_editor.deleteLines();
-              return 0;
-            }
-            break;
           default:
             break;
         }
