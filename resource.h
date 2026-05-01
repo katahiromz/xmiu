@@ -17,6 +17,8 @@
 #define IDC_GOTO_LABEL                      1011
 #define IDC_GOTO_EDIT                       1012
 #define IDC_TOGGLE_FULLSCREEN               1013
+#define IDC_DO_FIND_NEXT                    1014
+#define IDC_DO_FIND_PREV                    1015
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
@@ -51,7 +53,7 @@
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    101
         #define _APS_NEXT_COMMAND_VALUE     100
-        #define _APS_NEXT_CONTROL_VALUE     1013
+        #define _APS_NEXT_CONTROL_VALUE     1015
         #define _APS_NEXT_SYMED_VALUE       300
     #endif
 #endif

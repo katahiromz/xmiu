@@ -5104,6 +5104,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_TOGGLE_FULLSCREEN:
           g_editor.toggleFullScreen();
           break;
+        case IDC_DO_FIND_NEXT:
+          g_editor.findNext(true);
+          break;
+        case IDC_DO_FIND_PREV:
+          g_editor.findNext(false);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -6113,11 +6119,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
     if (msg.message == WM_KEYDOWN) {
-      if (msg.wParam == VK_F3) {
-        bool shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
-        g_editor.findNext(!shift);
-        continue;
-      }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         if (msg.wParam == 'F') {
           g_editor.showFindDialog(false);
