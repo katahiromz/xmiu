@@ -59,6 +59,8 @@ IDR_MAINACCEL ACCELERATORS
     "0", IDC_ZOOM_100, CONTROL, VIRTKEY
     VK_NUMPAD0, IDC_ZOOM_100, CONTROL, VIRTKEY
     VK_INSERT, IDC_INSERT_MODE, VIRTKEY
+    VK_TAB, IDC_INDENT, VIRTKEY
+    VK_TAB, IDC_UNINDENT, SHIFT, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////

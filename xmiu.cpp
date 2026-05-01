@@ -5223,6 +5223,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.isOverwriteMode = !g_editor.isOverwriteMode;
           InvalidateRect(hwnd, NULL, FALSE);
           break;
+        case IDC_INDENT:
+          if (g_editor.isRectSelecting)
+            g_editor.insertAtCursors("\t");
+          else
+            g_editor.indentLines(false);
+          break;
+        case IDC_UNINDENT:
+          g_editor.unindentLines();
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5831,17 +5840,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         return DefWindowProc(hwnd, msg, wParam, lParam);
       break;
     case WM_KEYDOWN:
-      if (wParam == VK_TAB) {
-        if (GetKeyState(VK_SHIFT) & 0x8000)
-          g_editor.unindentLines();
-        else {
-          if (g_editor.isRectSelecting)
-            g_editor.insertAtCursors("\t");
-          else
-            g_editor.indentLines(false);
-        }
-        return 0;
-      }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
           case VK_OEM_6:

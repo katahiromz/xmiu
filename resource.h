@@ -43,6 +43,8 @@
 #define IDC_MOVE_SELECT_DOWN                1037
 #define IDC_ZOOM_100                        1038
 #define IDC_INSERT_MODE                     1039
+#define IDC_INDENT                          1040
+#define IDC_UNINDENT                        1041
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
