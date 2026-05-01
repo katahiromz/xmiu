@@ -51,6 +51,12 @@ IDR_MAINMENU MENU
         MENUITEM SEPARATOR
         MENUITEM "単語の折り返し\tAlt+Z", ID_WORD_WRAP_MODE
     }
+    POPUP "ヘルプ(&H)"
+    {
+        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM SEPARATOR
+        MENUITEM "バージョン情報(&A)...", ID_HELP
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
