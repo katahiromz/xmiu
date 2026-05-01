@@ -5232,6 +5232,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_UNINDENT:
           g_editor.unindentLines();
           break;
+        case IDC_DELETE:
+          g_editor.rollbackPadding();
+          g_editor.isRectSelecting = false;
+          g_editor.deleteForwardAtCursors();
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5871,13 +5877,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.isRectSelecting = false;
           InvalidateRect(hwnd, NULL, FALSE);
         }
-        return 0;
-      }
-      if (wParam == VK_DELETE) {
-        g_editor.rollbackPadding();
-        g_editor.isRectSelecting = false;
-        g_editor.deleteForwardAtCursors();
-        InvalidateRect(hwnd, NULL, FALSE);
         return 0;
       }
       if (g_editor.showHelpPopup) {
