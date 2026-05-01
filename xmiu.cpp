@@ -5155,6 +5155,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_DELETE_LINES:
           g_editor.deleteLines();
           break;
+        case IDC_UPPERCASE:
+          g_editor.convertCase(true);
+          break;
+        case IDC_LOWERCASE:
+          g_editor.convertCase(false);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5789,12 +5795,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             return 0;
           case VK_OEM_4:
             g_editor.unindentLines();
-            return 0;
-          case 'U':
-            if (GetKeyState(VK_SHIFT) & 0x8000)
-              g_editor.convertCase(false);
-            else
-              g_editor.convertCase(true);
             return 0;
           case 'B':
             g_editor.jumpToMatchingBracket();
