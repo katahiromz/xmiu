@@ -1,4 +1,9 @@
-﻿#define NOMINMAX
+﻿// xmiu.cpp --- xmiu (text editor)
+// Authors: kenjinote, katahiromz
+// License: MIT
+// Copyright (c) 2025 kenjinote (hack.jp)
+// Copyright (c) 2026 Katayama Hirofumi MZ (katayama.hirofumi.mz@gmail.com)
+#define NOMINMAX
 #include <windows.h>
 #include <shellapi.h>
 #include <d3d11.h>
