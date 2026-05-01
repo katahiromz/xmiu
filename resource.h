@@ -28,6 +28,7 @@
 #define IDC_DO_REDO                         1022
 #define IDC_DO_COPY                         1023
 #define IDC_DO_CUT                          1024
+#define IDC_DO_PASTE                        1025
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
