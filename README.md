@@ -1,10 +1,10 @@
-﻿# miu — 次世代テキストエディタ
+﻿# xmiu — 次世代テキストエディタ
 
-<img src="image/icon-128x128.png" alt="[miu アイコン]" />
+<img src="image/icon-128x128.png" alt="[xmiu アイコン]" />
 
-先進✨の超高速かつ最小実装のテキストエディタ📄です。カラフルな絵文字🎨に対応。非常に軽快に動作し、巨大ファイルの高速編集が可能です。
+先進✨の超高速のテキストエディタ📄です。カラフルな絵文字🎨に対応。非常に軽快に動作し、巨大ファイルの高速編集が可能です。
 
-<img src="image/screenshot.png" alt="[miu スクリーンショット]" width="474" height="344" />
+<img src="image/screenshot.png" alt="[xmiu スクリーンショット]" width="474" height="344" />
 
 ## 主な特徴 🚩
 
@@ -44,8 +44,8 @@
 
 ## ダウンロード ⬇
 
-最新リリースは [Releases](https://github.com/kenjinote/miu/releases) からダウンロードできます。
+最新リリースは [Releases](https://github.com/katahiromz/xmiu/releases) からダウンロードできます。
 
 ## 連絡先 📬
 
-ご意見・ご要望・バグ報告は [Issues](https://github.com/kenjinote/miu/issues) または [X/Twitter @kenjinote](https://x.com/kenjinote) までお願いいたします。
+ご意見・ご要望・バグ報告は [Issues](https://github.com/katahiromz/xmiu/issues) または [X/Twitter @katahiromz](https://x.com/katahiromz) までお願いいたします。
