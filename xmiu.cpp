@@ -2837,45 +2837,50 @@ regex_color: 0.8 0.4 0.2 1.0
         }
         return FALSE;
       case WM_COMMAND:
-        if (LOWORD(wParam) == IDC_FIND_CASE ||
-            LOWORD(wParam) == IDC_FIND_WORD ||
-            LOWORD(wParam) == IDC_FIND_REGEX) {
-          bool bCase = IsDlgButtonChecked(hDlg, IDC_FIND_CASE) == BST_CHECKED;
-          bool bWord = IsDlgButtonChecked(hDlg, IDC_FIND_WORD) == BST_CHECKED;
-          bool bRegex = IsDlgButtonChecked(hDlg, IDC_FIND_REGEX) == BST_CHECKED;
-          pThis->updateSearchFlags(bCase, bWord, bRegex);
-          InvalidateRect(pThis->hwnd, NULL, FALSE);
-        }
-        if (HIWORD(wParam) == EN_CHANGE) {
-          wchar_t wbuf[1024];
-          if (LOWORD(wParam) == IDC_FIND_EDIT) {
-            GetDlgItemTextW(hDlg, IDC_FIND_EDIT, wbuf, 1024);
-            pThis->updateSearchQuery(WToUTF8(wbuf));
-            InvalidateRect(pThis->hwnd, NULL, FALSE);
-          }
-          if (LOWORD(wParam) == IDC_REPLACE_EDIT) {
-            GetDlgItemTextW(hDlg, IDC_REPLACE_EDIT, wbuf, 1024);
-            pThis->replaceQuery = WToUTF8(wbuf);
-          }
-        }
-        if (LOWORD(wParam) == IDC_FIND_NEXT || LOWORD(wParam) == IDOK) {
-          pThis->findNext(true);
-          return TRUE;
-        }
-        if (LOWORD(wParam) == IDC_REPLACE_BTN) {
-          if (!pThis->isReplaceMode) return TRUE;
-          pThis->replaceNext();
-          return TRUE;
-        }
-        if (LOWORD(wParam) == IDC_REPLACE_ALL_BTN) {
-          if (!pThis->isReplaceMode) return TRUE;
-          pThis->replaceAll();
-          return TRUE;
-        }
-        if (LOWORD(wParam) == IDC_FIND_CANCEL || LOWORD(wParam) == IDCANCEL) {
-          DestroyWindow(hDlg);
-          pThis->hFindDlg = NULL;
-          return TRUE;
+        switch (LOWORD(wParam)) {
+          case IDC_FIND_CASE:
+          case IDC_FIND_WORD:
+          case IDC_FIND_REGEX:
+            {
+              bool bCase = IsDlgButtonChecked(hDlg, IDC_FIND_CASE) == BST_CHECKED;
+              bool bWord = IsDlgButtonChecked(hDlg, IDC_FIND_WORD) == BST_CHECKED;
+              bool bRegex = IsDlgButtonChecked(hDlg, IDC_FIND_REGEX) == BST_CHECKED;
+              pThis->updateSearchFlags(bCase, bWord, bRegex);
+              InvalidateRect(pThis->hwnd, NULL, FALSE);
+            }
+            break;
+          case IDC_FIND_EDIT:
+            if (HIWORD(wParam) == EN_CHANGE) {
+              wchar_t wbuf[1024];
+              GetDlgItemTextW(hDlg, IDC_FIND_EDIT, wbuf, 1024);
+              pThis->updateSearchQuery(WToUTF8(wbuf));
+              InvalidateRect(pThis->hwnd, NULL, FALSE);
+            }
+            break;
+          case IDC_REPLACE_EDIT:
+            if (HIWORD(wParam) == EN_CHANGE) {
+              wchar_t wbuf[1024];
+              GetDlgItemTextW(hDlg, IDC_REPLACE_EDIT, wbuf, 1024);
+              pThis->replaceQuery = WToUTF8(wbuf);
+            }
+            break;
+          case IDC_FIND_NEXT:
+          case IDOK:
+            pThis->findNext(true);
+            return TRUE;
+          case IDC_REPLACE_BTN:
+            if (!pThis->isReplaceMode) return TRUE;
+            pThis->replaceNext();
+            return TRUE;
+          case IDC_REPLACE_ALL_BTN:
+            if (!pThis->isReplaceMode) return TRUE;
+            pThis->replaceAll();
+            return TRUE;
+          case IDC_FIND_CANCEL:
+          case IDCANCEL:
+            DestroyWindow(hDlg);
+            pThis->hFindDlg = NULL;
+            return TRUE;
         }
         break;
     }
