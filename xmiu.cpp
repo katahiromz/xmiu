@@ -5076,6 +5076,137 @@ regex_color: 0.8 0.4 0.2 1.0
       isFullScreen = false;
     }
   }
+  void moveCursor(UINT vk, bool shift, bool ctrl) {
+    bool alt = false;
+    if (alt && shift &&
+        (vk == VK_LEFT || vk == VK_RIGHT || vk == VK_UP ||
+         vk == VK_DOWN)) {
+      if (!isRectSelecting) {
+        isRectSelecting = true;
+        size_t p =
+            cursors.empty() ? 0 : cursors.back().head;
+        rectAnchorX = rectHeadX = getXFromPos(p);
+        rectAnchorLine = rectHeadLine =
+            getLineIdx(p);
+      }
+      if (vk == VK_LEFT || vk == VK_RIGHT) {
+        int lineIdx = rectHeadLine;
+        if (lineIdx < 0) lineIdx = 0;
+        if (lineIdx >= (int)lineStarts.size())
+          lineIdx = (int)lineStarts.size() - 1;
+        size_t pos =
+            getPosFromLineAndX(lineIdx, rectHeadX);
+        float textEndX = getXFromPos(pos);
+        bool inVirtualSpace = (rectHeadX > textEndX + 1.0f);
+        if (inVirtualSpace) {
+          if (vk == VK_LEFT) {
+            rectHeadX -= charWidth;
+            if (rectHeadX < textEndX)
+              rectHeadX = textEndX;
+          } else
+            rectHeadX += charWidth;
+        } else {
+          bool forward = (vk == VK_RIGHT);
+          size_t nextPos = moveCaretVisual(pos, forward);
+          rectHeadX = getXFromPos(nextPos);
+        }
+      }
+      if (vk == VK_UP) {
+        if (rectHeadLine > 0) rectHeadLine--;
+      }
+      if (vk == VK_DOWN) {
+        if (rectHeadLine + 1 < (int)lineStarts.size())
+          rectHeadLine++;
+      }
+      updateRectSelection();
+      InvalidateRect(hwnd, NULL, FALSE);
+      return;
+    }
+    rollbackPadding();
+    isRectSelecting = false;
+    for (auto& c : cursors) {
+      if (vk == VK_LEFT) {
+        if (c.hasSelection() && !shift) {
+          c.head = c.start();
+          c.anchor = c.head;
+        } else {
+          if (ctrl)
+            c.head = moveWordLeft(c.head);
+          else
+            c.head = moveCaretVisual(c.head, false);
+          if (!shift) c.anchor = c.head;
+        }
+      } else if (vk == VK_RIGHT) {
+        if (c.hasSelection() && !shift) {
+          c.head = c.end();
+          c.anchor = c.head;
+        } else {
+          if (ctrl)
+            c.head = moveWordRight(c.head);
+          else
+            c.head = moveCaretVisual(c.head, true);
+          if (!shift) c.anchor = c.head;
+        }
+      } else if (vk == VK_UP) {
+        int l = getLineIdx(c.head);
+        if (l > 0) c.head = getPosFromLineAndX(l - 1, c.desiredX);
+        if (!shift) c.anchor = c.head;
+      } else if (vk == VK_DOWN) {
+        int l = getLineIdx(c.head);
+        if (l + 1 < (int)lineStarts.size())
+          c.head = getPosFromLineAndX(l + 1, c.desiredX);
+        if (!shift) c.anchor = c.head;
+      } else if (vk == VK_HOME) {
+        if (ctrl)
+          c.head = 0;
+        else {
+          size_t p = c.head;
+          while (p > 0 && pt.charAt(p - 1) != '\n') p--;
+          c.head = p;
+        }
+        if (!shift) c.anchor = c.head;
+      } else if (vk == VK_END) {
+        if (ctrl)
+          c.head = pt.length();
+        else {
+          size_t p = c.head;
+          size_t len = pt.length();
+          while (p < len && pt.charAt(p) != '\n') p++;
+          if (p > 0 && p < len && pt.charAt(p) == '\n') {
+            if (pt.charAt(p - 1) == '\r') p--;
+          }
+          c.head = p;
+        }
+        if (!shift) c.anchor = c.head;
+        c.desiredX = getXFromPos(c.head);
+      } else if (vk == VK_PRIOR) {
+        RECT r;
+        GetClientRect(hwnd, &r);
+        int p =
+            (int)((r.bottom / dpiScaleY) / lineHeight);
+        int l = getLineIdx(c.head);
+        c.head =
+            getPosFromLineAndX(std::max(0, l - p), c.desiredX);
+        if (!shift) c.anchor = c.head;
+      } else if (vk == VK_NEXT) {
+        RECT r;
+        GetClientRect(hwnd, &r);
+        int p =
+            (int)((r.bottom / dpiScaleY) / lineHeight);
+        int l = getLineIdx(c.head);
+        c.head = getPosFromLineAndX(
+            std::min((int)lineStarts.size() - 1, l + p),
+            c.desiredX);
+        if (!shift) c.anchor = c.head;
+      }
+      if (vk == VK_LEFT || vk == VK_RIGHT || vk == VK_HOME ||
+          vk == VK_END)
+        c.desiredX = getXFromPos(c.head);
+    }
+    mergeCursors();
+    ensureCaretVisible();
+    InvalidateRect(hwnd, NULL, FALSE);
+  }
 } g_editor;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -5191,22 +5322,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.cursors.push_back({g_editor.pt.length(), 0, 0.0f});
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case IDC_MOVE_UP:
-          g_editor.rollbackPadding();
-          g_editor.jumpToFileEdge(true, false);
-          break;
-        case IDC_MOVE_SELECT_UP:
-          g_editor.rollbackPadding();
-          g_editor.jumpToFileEdge(true, true);
-          break;
-        case IDC_MOVE_DOWN:
-          g_editor.rollbackPadding();
-          g_editor.jumpToFileEdge(false, false);
-          break;
-        case IDC_MOVE_SELECT_DOWN:
-          g_editor.rollbackPadding();
-          g_editor.jumpToFileEdge(false, true);
-          break;
         case IDC_ZOOM_100:
           {
             g_editor.updateFont(21.0f);
@@ -5273,8 +5388,101 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_JUMP_TO_MATCHING_BRACKET:
           g_editor.jumpToMatchingBracket();
           break;
-        case IDC_DELETE_LINES:
-          g_editor.deleteLines();
+        case IDC_MOVE_LEFT:
+          g_editor.moveCursor(VK_LEFT, false, false);
+          break;
+        case IDC_MOVE_SHIFT_LEFT:
+          g_editor.moveCursor(VK_LEFT, true, false);
+          break;
+        case IDC_MOVE_CONTROL_LEFT:
+          g_editor.moveCursor(VK_LEFT, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_LEFT:
+          g_editor.moveCursor(VK_LEFT, true, true);
+          break;
+        case IDC_MOVE_RIGHT:
+          g_editor.moveCursor(VK_RIGHT, false, false);
+          break;
+        case IDC_MOVE_SHIFT_RIGHT:
+          g_editor.moveCursor(VK_RIGHT, true, false);
+          break;
+        case IDC_MOVE_CONTROL_RIGHT:
+          g_editor.moveCursor(VK_RIGHT, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_RIGHT:
+          g_editor.moveCursor(VK_RIGHT, true, true);
+          break;
+        case IDC_MOVE_UP:
+          g_editor.moveCursor(VK_UP, false, false);
+          break;
+        case IDC_MOVE_SHIFT_UP:
+          g_editor.moveCursor(VK_UP, true, false);
+          break;
+        case IDC_MOVE_CONTROL_UP:
+          g_editor.moveCursor(VK_UP, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_UP:
+          g_editor.moveCursor(VK_UP, true, true);
+          break;
+        case IDC_MOVE_DOWN:
+          g_editor.moveCursor(VK_DOWN, false, false);
+          break;
+        case IDC_MOVE_SHIFT_DOWN:
+          g_editor.moveCursor(VK_DOWN, true, false);
+          break;
+        case IDC_MOVE_CONTROL_DOWN:
+          g_editor.moveCursor(VK_DOWN, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_DOWN:
+          g_editor.moveCursor(VK_DOWN, true, true);
+          break;
+        case IDC_MOVE_HOME:
+          g_editor.moveCursor(VK_HOME, false, false);
+          break;
+        case IDC_MOVE_SHIFT_HOME:
+          g_editor.moveCursor(VK_HOME, true, false);
+          break;
+        case IDC_MOVE_CONTROL_HOME:
+          g_editor.moveCursor(VK_HOME, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_HOME:
+          g_editor.moveCursor(VK_HOME, true, true);
+          break;
+        case IDC_MOVE_END:
+          g_editor.moveCursor(VK_END, false, false);
+          break;
+        case IDC_MOVE_SHIFT_END:
+          g_editor.moveCursor(VK_END, true, false);
+          break;
+        case IDC_MOVE_CONTROL_END:
+          g_editor.moveCursor(VK_END, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_END:
+          g_editor.moveCursor(VK_END, true, true);
+          break;
+        case IDC_MOVE_PRIOR:
+          g_editor.moveCursor(VK_PRIOR, false, false);
+          break;
+        case IDC_MOVE_SHIFT_PRIOR:
+          g_editor.moveCursor(VK_PRIOR, true, false);
+          break;
+        case IDC_MOVE_CONTROL_PRIOR:
+          g_editor.moveCursor(VK_PRIOR, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_PRIOR:
+          g_editor.moveCursor(VK_PRIOR, true, true);
+          break;
+        case IDC_MOVE_NEXT:
+          g_editor.moveCursor(VK_NEXT, false, false);
+          break;
+        case IDC_MOVE_SHIFT_NEXT:
+          g_editor.moveCursor(VK_NEXT, true, false);
+          break;
+        case IDC_MOVE_CONTROL_NEXT:
+          g_editor.moveCursor(VK_NEXT, false, true);
+          break;
+        case IDC_MOVE_CONTROL_SHIFT_NEXT:
+          g_editor.moveCursor(VK_NEXT, true, true);
           break;
       }
       break;
@@ -5862,155 +6070,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_IME_SETCONTEXT:
       lParam &= ~ISC_SHOWUICOMPOSITIONWINDOW;
       return DefWindowProc(hwnd, msg, wParam, lParam);
-    case WM_SYSCHAR:
-      return 0;
-    case WM_KEYDOWN:
-      if (GetKeyState(VK_CONTROL) & 0x8000) {
-        switch (wParam) {
-          default:
-            break;
-        }
-      }
-      if (g_editor.showHelpPopup) {
-        g_editor.showHelpPopup = false;
-        InvalidateRect(hwnd, NULL, FALSE);
-      }
-      if (wParam == VK_LEFT || wParam == VK_RIGHT || wParam == VK_UP ||
-          wParam == VK_DOWN || wParam == VK_HOME || wParam == VK_END ||
-          wParam == VK_PRIOR || wParam == VK_NEXT) {
-        bool shift = (GetKeyState(VK_SHIFT) & 0x8000);
-        bool ctrl = (GetKeyState(VK_CONTROL) & 0x8000);
-        bool alt = (GetKeyState(VK_MENU) & 0x8000);
-        if (alt && shift &&
-            (wParam == VK_LEFT || wParam == VK_RIGHT || wParam == VK_UP ||
-             wParam == VK_DOWN)) {
-          if (!g_editor.isRectSelecting) {
-            g_editor.isRectSelecting = true;
-            size_t p =
-                g_editor.cursors.empty() ? 0 : g_editor.cursors.back().head;
-            g_editor.rectAnchorX = g_editor.rectHeadX = g_editor.getXFromPos(p);
-            g_editor.rectAnchorLine = g_editor.rectHeadLine =
-                g_editor.getLineIdx(p);
-          }
-          if (wParam == VK_LEFT || wParam == VK_RIGHT) {
-            int lineIdx = g_editor.rectHeadLine;
-            if (lineIdx < 0) lineIdx = 0;
-            if (lineIdx >= (int)g_editor.lineStarts.size())
-              lineIdx = (int)g_editor.lineStarts.size() - 1;
-            size_t pos =
-                g_editor.getPosFromLineAndX(lineIdx, g_editor.rectHeadX);
-            float textEndX = g_editor.getXFromPos(pos);
-            bool inVirtualSpace = (g_editor.rectHeadX > textEndX + 1.0f);
-            if (inVirtualSpace) {
-              if (wParam == VK_LEFT) {
-                g_editor.rectHeadX -= g_editor.charWidth;
-                if (g_editor.rectHeadX < textEndX)
-                  g_editor.rectHeadX = textEndX;
-              } else
-                g_editor.rectHeadX += g_editor.charWidth;
-            } else {
-              bool forward = (wParam == VK_RIGHT);
-              size_t nextPos = g_editor.moveCaretVisual(pos, forward);
-              g_editor.rectHeadX = g_editor.getXFromPos(nextPos);
-            }
-          }
-          if (wParam == VK_UP) {
-            if (g_editor.rectHeadLine > 0) g_editor.rectHeadLine--;
-          }
-          if (wParam == VK_DOWN) {
-            if (g_editor.rectHeadLine + 1 < (int)g_editor.lineStarts.size())
-              g_editor.rectHeadLine++;
-          }
-          g_editor.updateRectSelection();
-          InvalidateRect(hwnd, NULL, FALSE);
-          return 0;
-        }
-        g_editor.rollbackPadding();
-        g_editor.isRectSelecting = false;
-        for (auto& c : g_editor.cursors) {
-          if (wParam == VK_LEFT) {
-            if (c.hasSelection() && !shift) {
-              c.head = c.start();
-              c.anchor = c.head;
-            } else {
-              if (ctrl)
-                c.head = g_editor.moveWordLeft(c.head);
-              else
-                c.head = g_editor.moveCaretVisual(c.head, false);
-              if (!shift) c.anchor = c.head;
-            }
-          } else if (wParam == VK_RIGHT) {
-            if (c.hasSelection() && !shift) {
-              c.head = c.end();
-              c.anchor = c.head;
-            } else {
-              if (ctrl)
-                c.head = g_editor.moveWordRight(c.head);
-              else
-                c.head = g_editor.moveCaretVisual(c.head, true);
-              if (!shift) c.anchor = c.head;
-            }
-          } else if (wParam == VK_UP) {
-            int l = g_editor.getLineIdx(c.head);
-            if (l > 0) c.head = g_editor.getPosFromLineAndX(l - 1, c.desiredX);
-            if (!shift) c.anchor = c.head;
-          } else if (wParam == VK_DOWN) {
-            int l = g_editor.getLineIdx(c.head);
-            if (l + 1 < (int)g_editor.lineStarts.size())
-              c.head = g_editor.getPosFromLineAndX(l + 1, c.desiredX);
-            if (!shift) c.anchor = c.head;
-          } else if (wParam == VK_HOME) {
-            if (ctrl)
-              c.head = 0;
-            else {
-              size_t p = c.head;
-              while (p > 0 && g_editor.pt.charAt(p - 1) != '\n') p--;
-              c.head = p;
-            }
-            if (!shift) c.anchor = c.head;
-          } else if (wParam == VK_END) {
-            if (ctrl)
-              c.head = g_editor.pt.length();
-            else {
-              size_t p = c.head;
-              size_t len = g_editor.pt.length();
-              while (p < len && g_editor.pt.charAt(p) != '\n') p++;
-              if (p > 0 && p < len && g_editor.pt.charAt(p) == '\n') {
-                if (g_editor.pt.charAt(p - 1) == '\r') p--;
-              }
-              c.head = p;
-            }
-            if (!shift) c.anchor = c.head;
-            c.desiredX = g_editor.getXFromPos(c.head);
-          } else if (wParam == VK_PRIOR) {
-            RECT r;
-            GetClientRect(hwnd, &r);
-            int p =
-                (int)((r.bottom / g_editor.dpiScaleY) / g_editor.lineHeight);
-            int l = g_editor.getLineIdx(c.head);
-            c.head =
-                g_editor.getPosFromLineAndX(std::max(0, l - p), c.desiredX);
-            if (!shift) c.anchor = c.head;
-          } else if (wParam == VK_NEXT) {
-            RECT r;
-            GetClientRect(hwnd, &r);
-            int p =
-                (int)((r.bottom / g_editor.dpiScaleY) / g_editor.lineHeight);
-            int l = g_editor.getLineIdx(c.head);
-            c.head = g_editor.getPosFromLineAndX(
-                std::min((int)g_editor.lineStarts.size() - 1, l + p),
-                c.desiredX);
-            if (!shift) c.anchor = c.head;
-          }
-          if (wParam == VK_LEFT || wParam == VK_RIGHT || wParam == VK_HOME ||
-              wParam == VK_END)
-            c.desiredX = g_editor.getXFromPos(c.head);
-        }
-        g_editor.mergeCursors();
-        g_editor.ensureCaretVisible();
-        InvalidateRect(hwnd, NULL, FALSE);
-      }
-      break;
     case WM_DROPFILES: {
       if (g_editor.checkUnsavedChanges()) {
         HDROP hDrop = (HDROP)wParam;
