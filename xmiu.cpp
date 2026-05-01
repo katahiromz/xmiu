@@ -5110,6 +5110,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_DO_FIND_PREV:
           g_editor.findNext(false);
           break;
+        case IDC_SHOW_FIND:
+          g_editor.showFindDialog(false);
+          break;
+        case IDC_SHOW_REPLACE:
+          g_editor.showFindDialog(true);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -6118,18 +6124,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   g_editor.updateTitleBar();
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
-    if (msg.message == WM_KEYDOWN) {
-      if (GetKeyState(VK_CONTROL) & 0x8000) {
-        if (msg.wParam == 'F') {
-          g_editor.showFindDialog(false);
-          continue;
-        }
-        if (msg.wParam == 'H' || msg.wParam == 'R') {
-          g_editor.showFindDialog(true);
-          continue;
-        }
-      }
-    }
     if (g_editor.showHelpPopup &&
         (msg.message == WM_KEYDOWN || msg.message == WM_CHAR ||
          msg.message == WM_LBUTTONDOWN)) {
