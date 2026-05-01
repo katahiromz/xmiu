@@ -39,6 +39,7 @@ IDR_MAINACCEL ACCELERATORS
     "Y", IDC_DO_REDO, CONTROL, VIRTKEY
     "C", IDC_DO_COPY, CONTROL, VIRTKEY
     VK_INSERT, IDC_DO_COPY, CONTROL, VIRTKEY
+    "X", IDC_DO_CUT, CONTROL, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////

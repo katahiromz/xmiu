@@ -5140,6 +5140,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_DO_COPY:
           g_editor.copyToClipboard();
           break;
+        case IDC_DO_CUT:
+          g_editor.cutToClipboard();
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5769,9 +5772,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'X':
-            g_editor.cutToClipboard();
-            return 0;
           case 'V':
             g_editor.pasteFromClipboard();
             return 0;
