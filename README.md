@@ -20,27 +20,11 @@
 
 ## 対応環境
 
-- Windows 11 / Windows 10 / macOS / iOS / iPadOS
+- Windows 11 / Windows 10
 
 ## 開発環境
 
-- Visual Studio 2026
-
-## ビルド要件
-
-本プロジェクトは文字コード判定に Google compact_enc_det を使用しています。  
-ビルドする前に、以下の手順でライブラリを用意してください。
-
-01. git clone https://github.com/google/compact_enc_det.git
-
-02. cd compact_enc_det
-
-03. cmake . -G "Visual Studio 18 2026" -A x64  
-   ( iOS用は 'cmake . -G Xcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_POLICY_VERSION_MINIMUM=3.5' )  
-   ( macOS用は 'cmake . -G Xcode -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_POLICY_VERSION_MINIMUM=3.5' )  
-5. cmake --build . --config Release
-
-生成された ced.lib をプロジェクトのライブラリパスに配置してください。
+- Visual Studio 2026, Visual Studio 2017
 
 ## ダウンロード ⬇
 
