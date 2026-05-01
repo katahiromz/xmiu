@@ -1,6 +1,6 @@
 ﻿# xmiu — テキストエディタ
 
-<img src="image/icon-128x128.png" alt="[xmiu アイコン]" />
+<img src="image/xmiu-128x128.png" alt="[xmiu アイコン]" />
 
 Kenji様の[kenjinote/miu](https://github.com/kenjinote/miu)からフォークした、普通に使えるテキストエディタです。
 
