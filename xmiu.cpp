@@ -11,6 +11,7 @@
 #include <d2d1_1.h>
 #include <d2d1.h>
 #include <dwrite.h>
+#include <dwrite_2.h>
 #include <dcomp.h>
 #include <initguid.h>
 #include <d2d1effects.h>
@@ -532,20 +533,56 @@ class CustomTextRenderer : public IDWriteTextRenderer {
  public:
   ID2D1DeviceContext* rend;
   ID2D1SolidColorBrush* defaultBrush;
-  CustomTextRenderer(ID2D1DeviceContext* r, ID2D1SolidColorBrush* b)
-      : rend(r), defaultBrush(b) {}
+  IDWriteFactory2* dwFactory2;
+  CustomTextRenderer(ID2D1DeviceContext* r, ID2D1SolidColorBrush* b, IDWriteFactory2* f)
+      : rend(r), defaultBrush(b), dwFactory2(f) {}
   IFACEMETHOD(DrawGlyphRun)(void*, FLOAT baselineOriginX, FLOAT baselineOriginY,
                             DWRITE_MEASURING_MODE measuringMode,
                             DWRITE_GLYPH_RUN const* glyphRun,
                             DWRITE_GLYPH_RUN_DESCRIPTION const*,
                             IUnknown* clientDrawingEffect) override {
-    ID2D1SolidColorBrush* brush = defaultBrush;
-    if (clientDrawingEffect)
-      clientDrawingEffect->QueryInterface(__uuidof(ID2D1SolidColorBrush),
-                                          (void**)&brush);
-    rend->DrawGlyphRun(D2D1::Point2F(baselineOriginX, baselineOriginY),
-                       glyphRun, brush, measuringMode);
-    if (clientDrawingEffect && brush != defaultBrush) brush->Release();
+    IDWriteColorGlyphRunEnumerator* colorLayers = nullptr;
+    HRESULT hr = dwFactory2
+        ? dwFactory2->TranslateColorGlyphRun(baselineOriginX, baselineOriginY,
+              glyphRun, nullptr, measuringMode, nullptr, 0, &colorLayers)
+        : DWRITE_E_NOCOLOR;
+    if (SUCCEEDED(hr) && colorLayers) {
+      BOOL hasRun = FALSE;
+      while (SUCCEEDED(colorLayers->MoveNext(&hasRun)) && hasRun) {
+        const DWRITE_COLOR_GLYPH_RUN* colorRun = nullptr;
+        colorLayers->GetCurrentRun(&colorRun);
+        ID2D1SolidColorBrush* layerBrush = nullptr;
+        if (colorRun->paletteIndex == 0xFFFF) {
+          // 前景色レイヤー: clientDrawingEffect またはデフォルトブラシを使用
+          layerBrush = defaultBrush;
+          if (clientDrawingEffect)
+            clientDrawingEffect->QueryInterface(__uuidof(ID2D1SolidColorBrush),
+                                               (void**)&layerBrush);
+        } else {
+          rend->CreateSolidColorBrush(
+              D2D1::ColorF(colorRun->runColor.r, colorRun->runColor.g,
+                           colorRun->runColor.b, colorRun->runColor.a),
+              &layerBrush);
+        }
+        if (layerBrush) {
+          rend->DrawGlyphRun(
+              D2D1::Point2F(colorRun->baselineOriginX, colorRun->baselineOriginY),
+              &colorRun->glyphRun, layerBrush, measuringMode);
+          if (colorRun->paletteIndex != 0xFFFF) layerBrush->Release();
+          else if (clientDrawingEffect && layerBrush != defaultBrush) layerBrush->Release();
+        }
+      }
+      colorLayers->Release();
+    } else {
+      // カラー情報なし: 通常描画
+      ID2D1SolidColorBrush* brush = defaultBrush;
+      if (clientDrawingEffect)
+        clientDrawingEffect->QueryInterface(__uuidof(ID2D1SolidColorBrush),
+                                           (void**)&brush);
+      rend->DrawGlyphRun(D2D1::Point2F(baselineOriginX, baselineOriginY),
+                         glyphRun, brush, measuringMode);
+      if (clientDrawingEffect && brush != defaultBrush) brush->Release();
+    }
     return S_OK;
   }
   IFACEMETHOD(DrawUnderline)(void*, FLOAT, FLOAT, DWRITE_UNDERLINE const*,
@@ -642,6 +679,7 @@ struct Editor {
   IDCompositionDevice* dcompDevice = nullptr;
   IDCompositionTarget* dcompTarget = nullptr;
   IDWriteFactory* dwFactory = nullptr;
+  IDWriteFactory2* dwFactory2 = nullptr;
   IDWriteTextFormat* textFormat = nullptr;
   IDWriteTextFormat* popupTextFormat = nullptr;
   IDWriteTextFormat* helpTextFormat = nullptr;
@@ -1444,6 +1482,7 @@ regex_color: 0.8 0.4 0.2 1.0
     if (d3dDevice) d3dDevice->Release();
     DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
                         reinterpret_cast<IUnknown**>(&dwFactory));
+    dwFactory->QueryInterface(__uuidof(IDWriteFactory2), (void**)&dwFactory2);
     UINT dpi = GetDpiForWindow(hwnd);
     if (dpi == 0) dpi = 96;
     FLOAT dpix = (FLOAT)dpi;
@@ -1551,6 +1590,7 @@ regex_color: 0.8 0.4 0.2 1.0
     if (dotStyle) dotStyle->Release();
     if (roundJoinStyle) roundJoinStyle->Release();
     if (textFormat) textFormat->Release();
+    if (dwFactory2) { dwFactory2->Release(); dwFactory2 = nullptr; }
     if (dwFactory) dwFactory->Release();
     if (d2dFactory) d2dFactory->Release();
   }
@@ -3600,7 +3640,7 @@ regex_color: 0.8 0.4 0.2 1.0
       ID2D1SolidColorBrush* brush = nullptr;
       rend->CreateSolidColorBrush(textColor, &brush);
       applySyntaxHighlighting(layout, text, visibleStartOffset);
-      CustomTextRenderer customRenderer(rend, brush);
+      CustomTextRenderer customRenderer(rend, brush, dwFactory2);
       layout->Draw(nullptr, &customRenderer, 0, 0);
       brush->Release();
       ID2D1SolidColorBrush* wsBrush = nullptr;
@@ -3742,7 +3782,7 @@ regex_color: 0.8 0.4 0.2 1.0
         numLayout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
         float xPos = -(charWidth * 0.5f);
         rend->DrawTextLayout(D2D1::Point2F(xPos, yPos), numLayout,
-                             gutterTextBrush);
+                             gutterTextBrush, D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
         numLayout->Release();
       }
     }
