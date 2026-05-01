@@ -5095,7 +5095,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       if (LOWORD(wParam) != WA_INACTIVE) {
         g_editor.checkFileModification();
       }
-      return DefWindowProc(hwnd, msg, wParam, lParam);
+    case WM_COMMAND:
+      switch (LOWORD(wParam)) {
+        case IDC_DO_HELP:
+          g_editor.showHelpPopup = !g_editor.showHelpPopup;
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
+      }
+      break;
     case WM_SETCURSOR: {
       if (LOWORD(lParam) == HTCLIENT) {
         POINT pt;
@@ -6075,6 +6082,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
       }
     }
   }
+  HACCEL hAccel = LoadAcceleratorsW(hInstance, MAKEINTRESOURCEW(IDR_MAINACCEL));
   WNDCLASS wc = {0};
   wc.lpfnWndProc = WndProc;
   wc.hInstance = hInstance;
@@ -6102,11 +6110,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
     if (msg.message == WM_KEYDOWN) {
-      if (msg.wParam == VK_F1) {
-        g_editor.showHelpPopup = !g_editor.showHelpPopup;
-        InvalidateRect(hwnd, NULL, FALSE);
-        continue;
-      }
       if (msg.wParam == VK_F3) {
         bool shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
         g_editor.findNext(!shift);
@@ -6137,9 +6140,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
       }
     }
     if (!g_editor.hFindDlg || !IsDialogMessage(g_editor.hFindDlg, &msg)) {
-      TranslateMessage(&msg);
-      DispatchMessage(&msg);
+      if (!hAccel || !TranslateAcceleratorW(hwnd, hAccel, &msg)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+      }
     }
   }
+  DestroyAcceleratorTable(hAccel);
   return 0;
 }
