@@ -2,14 +2,14 @@
 
 <img src="image/icon-128x128.png" alt="[xmiu アイコン]" />
 
-テキストエディタです。
+Kenji様の[kenjinote/miu](https://github.com/kenjinote/miu)からフォークした、普通に使えるテキストエディタです。
 
 <img src="image/screenshot.png" alt="[xmiu スクリーンショット]" width="474" height="344" />
 
 ## 主な特徴 🚩
 
 - 🚀 C++/Win32 による高いパフォーマンス
-- 🎨 DirectWrite による高品質レンダリングと絵文字対応
+- 🎨 DirectWrite による高品質レンダリングとカラー絵文字対応
 - 🗂 メモリマップドファイルを用いた巨大ファイルの高速編集
 - 🔎 正規表現検索、大文字小文字の区別、単語単位での検索／置換
 - ✨ マルチカーソル、矩形選択が可能
