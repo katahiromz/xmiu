@@ -48,6 +48,10 @@
 #define IDC_DELETE                          1042
 #define IDC_ESCAPE                          1043
 #define IDC_WORD_WRAP_MODE                  1044
+#define IDC_MOVE_LINES_UP                   1045
+#define IDC_MOVE_LINES_DOWN                 1046
+#define IDC_DUPLICATE_LINES_UP              1047
+#define IDC_DUPLICATE_LINES_DOWN            1048
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103

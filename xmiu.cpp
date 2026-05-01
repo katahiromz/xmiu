@@ -5255,6 +5255,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.updateScrollBars();
           InvalidateRect(hwnd, NULL, FALSE);
           break;
+        case IDC_MOVE_LINES_UP:
+          g_editor.moveLines(true);
+          break;
+        case IDC_MOVE_LINES_DOWN:
+          g_editor.moveLines(false);
+          break;
+        case IDC_DUPLICATE_LINES_UP:
+          g_editor.duplicateLines(true);
+          break;
+        case IDC_DUPLICATE_LINES_DOWN:
+          g_editor.duplicateLines(false);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5844,14 +5856,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_SYSCHAR:
       return 0;
     case WM_SYSKEYDOWN:
-      if (wParam == VK_UP || wParam == VK_DOWN) {
-        bool shift = (GetKeyState(VK_SHIFT) & 0x8000);
-        if (shift)
-          g_editor.duplicateLines(wParam == VK_UP);
-        else
-          g_editor.moveLines(wParam == VK_UP);
-        return 0;
-      }
       if (wParam != VK_LEFT && wParam != VK_RIGHT)
         return DefWindowProc(hwnd, msg, wParam, lParam);
       break;
