@@ -5267,6 +5267,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_DUPLICATE_LINES_DOWN:
           g_editor.duplicateLines(false);
           break;
+        case IDC_FORCE_INDENT:
+          g_editor.indentLines(true);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5855,16 +5858,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       return DefWindowProc(hwnd, msg, wParam, lParam);
     case WM_SYSCHAR:
       return 0;
-    case WM_SYSKEYDOWN:
-      if (wParam != VK_LEFT && wParam != VK_RIGHT)
-        return DefWindowProc(hwnd, msg, wParam, lParam);
-      break;
     case WM_KEYDOWN:
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case VK_OEM_6:
-            g_editor.indentLines(true);
-            return 0;
           case VK_OEM_4:
             g_editor.unindentLines();
             return 0;
