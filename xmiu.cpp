@@ -5097,6 +5097,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
     case WM_COMMAND:
       switch (LOWORD(wParam)) {
+        case IDC_DO_NEW:
+          g_editor.newFile();
+          break;
         case IDC_DO_OPEN:
           g_editor.openFile();
           break;
@@ -5748,9 +5751,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'N':
-            g_editor.newFile();
-            return 0;
           case 'S':
             if (GetKeyState(VK_SHIFT) & 0x8000)
               g_editor.saveFileAs();

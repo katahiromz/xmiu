@@ -22,6 +22,7 @@
 #define IDC_SHOW_FIND                       1016
 #define IDC_SHOW_REPLACE                    1017
 #define IDC_DO_OPEN                         1018
+#define IDC_DO_NEW                          1019
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
