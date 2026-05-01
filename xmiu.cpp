@@ -5861,10 +5861,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
         }
       }
-      if ((GetKeyState(VK_SHIFT) & 0x8000) && wParam == VK_INSERT) {
-        g_editor.pasteFromClipboard();
-        return 0;
-      }
       if (wParam == VK_ESCAPE) {
         g_editor.rollbackPadding();
         if (!g_editor.cursors.empty()) {
