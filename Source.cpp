@@ -1,5 +1,4 @@
-﻿#pragma comment(linker,"\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#define NOMINMAX
+﻿#define NOMINMAX
 #include <windows.h>
 #include <shellapi.h>
 #include <d3d11.h>
@@ -28,18 +27,6 @@
 #include <cstring>
 #include "compact_enc_det/compact_enc_det.h"
 #include "resource.h"
-#pragma comment(lib, "d2d1.lib")
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "dcomp.lib")
-#pragma comment(lib, "dwrite.lib")
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "imm32.lib")
-#pragma comment(lib, "comdlg32.lib")
-#pragma comment(lib, "comctl32.lib")
-#pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib, "uxtheme.lib")
-#pragma comment(lib, "ced.lib")
 const std::wstring APP_VERSION = L"miu v1.0.23";
 enum MiuEncoding { ENC_UTF8_NOBOM = 0, ENC_UTF8_BOM, ENC_UTF16LE, ENC_UTF16BE, ENC_LOCAL };
 struct DetectResult { MiuEncoding type; UINT codePage; };

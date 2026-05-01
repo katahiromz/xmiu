@@ -33,8 +33,14 @@ endif()
 add_subdirectory(compact_enc_det)
 add_subdirectory(gtest)
 
+# No manifest
+if(MSVC)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /MANIFEST:NO")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MANIFEST:NO")
+endif()
+
 # xmiu.exe
 add_executable(xmiu WIN32 Source.cpp miu.rc)
 target_compile_definitions(xmiu PRIVATE UNICODE _UNICODE)
 target_include_directories(xmiu PRIVATE compact_enc_det)
-target_link_libraries(xmiu comctl32 ced)
+target_link_libraries(xmiu d2d1 d3d11 dxgi dcomp dwrite dxguid imm32 comdlg32 comctl32 dwmapi uxtheme ced)
