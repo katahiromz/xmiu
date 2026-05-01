@@ -1378,6 +1378,19 @@ regex_color: 0.8 0.4 0.2 1.0
     if (end > start) return {pt.getRange(start, end - start), true};
     return {"", true};
   }
+  static INT getMenuHeight(HWND hwnd) {
+    RECT rcMenu = { 0 };
+    HMENU hMenu = GetMenu(hwnd);
+    if (hMenu)
+      GetMenuItemRect(hwnd, hMenu, 0, &rcMenu);
+    return rcMenu.bottom - rcMenu.top;
+  }
+  static void getClientRect(HWND hwnd, LPRECT prc) {
+    RECT rc;
+    GetClientRect(hwnd, &rc);
+    rc.top += getMenuHeight(hwnd);
+    *prc = rc;
+  }
   void initGraphics(HWND h) {
     hwnd = h;
     RECT rc;
@@ -5228,14 +5241,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
     case WM_COMMAND:
       switch (LOWORD(wParam)) {
-        case IDC_DO_NEW:
+        case ID_NEW:
           g_editor.newFile();
           break;
-        case IDC_DO_OPEN:
+        case ID_OPEN:
           g_editor.openFile();
           break;
           case 'S':
-        case IDC_DO_SAVE:
+        case ID_SAVE:
           if (GetKeyState(VK_SHIFT) & 0x8000)
             g_editor.saveFileAs();
           else if (g_editor.currentFilePath.empty())
@@ -5243,56 +5256,56 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           else
             g_editor.saveFile(g_editor.currentFilePath);
           break;
-        case IDC_DO_HELP:
+        case ID_HELP:
           g_editor.showHelpPopup = !g_editor.showHelpPopup;
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case IDC_TOGGLE_FULLSCREEN:
+        case ID_TOGGLE_FULLSCREEN:
           g_editor.toggleFullScreen();
           break;
-        case IDC_DO_FIND_NEXT:
+        case ID_FIND_NEXT:
           g_editor.findNext(true);
           break;
-        case IDC_DO_FIND_PREV:
+        case ID_FIND_PREV:
           g_editor.findNext(false);
           break;
-        case IDC_SHOW_FIND:
+        case ID_SHOW_FIND:
           g_editor.showFindDialog(false);
           break;
-        case IDC_SHOW_REPLACE:
+        case ID_SHOW_REPLACE:
           g_editor.showFindDialog(true);
           break;
-        case IDC_DO_UNDO:
+        case ID_UNDO:
           g_editor.performUndo();
           break;
-        case IDC_DO_REDO:
+        case ID_REDO:
           g_editor.performRedo();
           break;
-        case IDC_DO_COPY:
+        case ID_COPY:
           g_editor.copyToClipboard();
           break;
-        case IDC_DO_CUT:
+        case ID_CUT:
           g_editor.cutToClipboard();
           break;
-        case IDC_DO_PASTE:
+        case ID_PASTE:
           g_editor.pasteFromClipboard();
           break;
-        case IDC_SELECT_NEXT_OCCURRENCE:
+        case ID_SELECT_NEXT_OCCURRENCE:
           g_editor.selectNextOccurrence();
           break;
-        case IDC_GO_TO_LINE:
+        case ID_GO_TO_LINE:
           g_editor.showGoToDialog();
           break;
-        case IDC_DELETE_LINES:
+        case ID_DELETE_LINES:
           g_editor.deleteLines();
           break;
-        case IDC_UPPERCASE:
+        case ID_UPPERCASE:
           g_editor.convertCase(true);
           break;
-        case IDC_LOWERCASE:
+        case ID_LOWERCASE:
           g_editor.convertCase(false);
           break;
-        case IDC_ZOOM_IN:
+        case ID_ZOOM_IN:
           {
             g_editor.updateFont(g_editor.currentFontSize * 1.1f);
             g_editor.rebuildLineStarts();
@@ -5304,7 +5317,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
-        case IDC_ZOOM_OUT:
+        case ID_ZOOM_OUT:
           {
             g_editor.updateFont(g_editor.currentFontSize * 0.9f);
             g_editor.rebuildLineStarts();
@@ -5316,13 +5329,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
-        case IDC_SELECT_ALL:
+        case ID_SELECT_ALL:
           g_editor.rollbackPadding();
           g_editor.cursors.clear();
           g_editor.cursors.push_back({g_editor.pt.length(), 0, 0.0f});
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case IDC_ZOOM_100:
+        case ID_ZOOM_100:
           {
             g_editor.updateFont(21.0f);
             g_editor.rebuildLineStarts();
@@ -5334,26 +5347,26 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
-        case IDC_INSERT_MODE:
+        case ID_INSERT_MODE:
           g_editor.isOverwriteMode = !g_editor.isOverwriteMode;
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case IDC_INDENT:
+        case ID_INDENT:
           if (g_editor.isRectSelecting)
             g_editor.insertAtCursors("\t");
           else
             g_editor.indentLines(false);
           break;
-        case IDC_UNINDENT:
+        case ID_UNINDENT:
           g_editor.unindentLines();
           break;
-        case IDC_DELETE:
+        case ID_DELETE:
           g_editor.rollbackPadding();
           g_editor.isRectSelecting = false;
           g_editor.deleteForwardAtCursors();
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case IDC_ESCAPE:
+        case ID_ESCAPE:
           g_editor.rollbackPadding();
           if (!g_editor.cursors.empty()) {
             Cursor c = g_editor.cursors.back();
@@ -5364,124 +5377,124 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
-        case IDC_WORD_WRAP_MODE:
+        case ID_WORD_WRAP_MODE:
           g_editor.wordWrapEnabled = !g_editor.wordWrapEnabled;
           if (g_editor.wordWrapEnabled) g_editor.hScrollPos = 0;
           g_editor.updateScrollBars();
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case IDC_MOVE_LINES_UP:
+        case ID_MOVE_LINES_UP:
           g_editor.moveLines(true);
           break;
-        case IDC_MOVE_LINES_DOWN:
+        case ID_MOVE_LINES_DOWN:
           g_editor.moveLines(false);
           break;
-        case IDC_DUPLICATE_LINES_UP:
+        case ID_DUPLICATE_LINES_UP:
           g_editor.duplicateLines(true);
           break;
-        case IDC_DUPLICATE_LINES_DOWN:
+        case ID_DUPLICATE_LINES_DOWN:
           g_editor.duplicateLines(false);
           break;
-        case IDC_FORCE_INDENT:
+        case ID_FORCE_INDENT:
           g_editor.indentLines(true);
           break;
-        case IDC_JUMP_TO_MATCHING_BRACKET:
+        case ID_JUMP_TO_MATCHING_BRACKET:
           g_editor.jumpToMatchingBracket();
           break;
-        case IDC_MOVE_LEFT:
+        case ID_MOVE_LEFT:
           g_editor.moveCursor(VK_LEFT, false, false);
           break;
-        case IDC_MOVE_SHIFT_LEFT:
+        case ID_MOVE_SHIFT_LEFT:
           g_editor.moveCursor(VK_LEFT, true, false);
           break;
-        case IDC_MOVE_CONTROL_LEFT:
+        case ID_MOVE_CONTROL_LEFT:
           g_editor.moveCursor(VK_LEFT, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_LEFT:
+        case ID_MOVE_CONTROL_SHIFT_LEFT:
           g_editor.moveCursor(VK_LEFT, true, true);
           break;
-        case IDC_MOVE_RIGHT:
+        case ID_MOVE_RIGHT:
           g_editor.moveCursor(VK_RIGHT, false, false);
           break;
-        case IDC_MOVE_SHIFT_RIGHT:
+        case ID_MOVE_SHIFT_RIGHT:
           g_editor.moveCursor(VK_RIGHT, true, false);
           break;
-        case IDC_MOVE_CONTROL_RIGHT:
+        case ID_MOVE_CONTROL_RIGHT:
           g_editor.moveCursor(VK_RIGHT, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_RIGHT:
+        case ID_MOVE_CONTROL_SHIFT_RIGHT:
           g_editor.moveCursor(VK_RIGHT, true, true);
           break;
-        case IDC_MOVE_UP:
+        case ID_MOVE_UP:
           g_editor.moveCursor(VK_UP, false, false);
           break;
-        case IDC_MOVE_SHIFT_UP:
+        case ID_MOVE_SHIFT_UP:
           g_editor.moveCursor(VK_UP, true, false);
           break;
-        case IDC_MOVE_CONTROL_UP:
+        case ID_MOVE_CONTROL_UP:
           g_editor.moveCursor(VK_UP, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_UP:
+        case ID_MOVE_CONTROL_SHIFT_UP:
           g_editor.moveCursor(VK_UP, true, true);
           break;
-        case IDC_MOVE_DOWN:
+        case ID_MOVE_DOWN:
           g_editor.moveCursor(VK_DOWN, false, false);
           break;
-        case IDC_MOVE_SHIFT_DOWN:
+        case ID_MOVE_SHIFT_DOWN:
           g_editor.moveCursor(VK_DOWN, true, false);
           break;
-        case IDC_MOVE_CONTROL_DOWN:
+        case ID_MOVE_CONTROL_DOWN:
           g_editor.moveCursor(VK_DOWN, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_DOWN:
+        case ID_MOVE_CONTROL_SHIFT_DOWN:
           g_editor.moveCursor(VK_DOWN, true, true);
           break;
-        case IDC_MOVE_HOME:
+        case ID_MOVE_HOME:
           g_editor.moveCursor(VK_HOME, false, false);
           break;
-        case IDC_MOVE_SHIFT_HOME:
+        case ID_MOVE_SHIFT_HOME:
           g_editor.moveCursor(VK_HOME, true, false);
           break;
-        case IDC_MOVE_CONTROL_HOME:
+        case ID_MOVE_CONTROL_HOME:
           g_editor.moveCursor(VK_HOME, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_HOME:
+        case ID_MOVE_CONTROL_SHIFT_HOME:
           g_editor.moveCursor(VK_HOME, true, true);
           break;
-        case IDC_MOVE_END:
+        case ID_MOVE_END:
           g_editor.moveCursor(VK_END, false, false);
           break;
-        case IDC_MOVE_SHIFT_END:
+        case ID_MOVE_SHIFT_END:
           g_editor.moveCursor(VK_END, true, false);
           break;
-        case IDC_MOVE_CONTROL_END:
+        case ID_MOVE_CONTROL_END:
           g_editor.moveCursor(VK_END, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_END:
+        case ID_MOVE_CONTROL_SHIFT_END:
           g_editor.moveCursor(VK_END, true, true);
           break;
-        case IDC_MOVE_PRIOR:
+        case ID_MOVE_PRIOR:
           g_editor.moveCursor(VK_PRIOR, false, false);
           break;
-        case IDC_MOVE_SHIFT_PRIOR:
+        case ID_MOVE_SHIFT_PRIOR:
           g_editor.moveCursor(VK_PRIOR, true, false);
           break;
-        case IDC_MOVE_CONTROL_PRIOR:
+        case ID_MOVE_CONTROL_PRIOR:
           g_editor.moveCursor(VK_PRIOR, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_PRIOR:
+        case ID_MOVE_CONTROL_SHIFT_PRIOR:
           g_editor.moveCursor(VK_PRIOR, true, true);
           break;
-        case IDC_MOVE_NEXT:
+        case ID_MOVE_NEXT:
           g_editor.moveCursor(VK_NEXT, false, false);
           break;
-        case IDC_MOVE_SHIFT_NEXT:
+        case ID_MOVE_SHIFT_NEXT:
           g_editor.moveCursor(VK_NEXT, true, false);
           break;
-        case IDC_MOVE_CONTROL_NEXT:
+        case ID_MOVE_CONTROL_NEXT:
           g_editor.moveCursor(VK_NEXT, false, true);
           break;
-        case IDC_MOVE_CONTROL_SHIFT_NEXT:
+        case ID_MOVE_CONTROL_SHIFT_NEXT:
           g_editor.moveCursor(VK_NEXT, true, true);
           break;
       }
@@ -6142,6 +6155,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   wc.lpfnWndProc = WndProc;
   wc.hInstance = hInstance;
   wc.lpszClassName = L"xmiu";
+  wc.lpszMenuName = MAKEINTRESOURCEW(IDR_MAINMENU);
   wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
   RegisterClass(&wc);
   UINT dpi = GetDpiForSystem();
@@ -6149,7 +6163,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   int initialWidth = MulDiv(800, dpi, 96);
   int initialHeight = MulDiv(640, dpi, 96);
   HWND hwnd =
-      CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP, wc.lpszClassName, L"xmiu",
+      CreateWindowEx(0, wc.lpszClassName, L"xmiu",
                      WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
                      initialWidth, initialHeight, NULL, NULL, hInstance, NULL);
   if (!hwnd) return 0;

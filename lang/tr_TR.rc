@@ -6,6 +6,50 @@
 LANGUAGE LANG_TURKISH, SUBLANG_DEFAULT
 
 //////////////////////////////////////////////////////////////////////////////
+// RT_MENU
+
+IDR_MAINMENU MENU
+{
+    POPUP "�t�@�C��(&F)"
+    {
+        MENUITEM "�V�K�쐬(&N)\tCtrl+N", ID_NEW
+        MENUITEM "�J��(&O)...\tCtrl+O", ID_OPEN
+        MENUITEM "�㏑���ۑ�(&S)\tCtrl+S", ID_SAVE
+    }
+    POPUP "�ҏW(&E)"
+    {
+        MENUITEM "���ɖ߂�(&U)\tCtrl+Z", ID_UNDO
+        MENUITEM "��蒼��(&R)\tCtrl+Y", ID_REDO
+        MENUITEM SEPARATOR
+        MENUITEM "�؂���(&T)\tCtrl+X", ID_CUT
+        MENUITEM "�R�s�[(&C)\tCtrl+C", ID_COPY
+        MENUITEM "�\\��t��(&P)\tCtrl+V", ID_PASTE
+        MENUITEM "�폜(&D)\tDel", ID_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "���ׂđI��(&A)\tCtrl+A", ID_SELECT_ALL
+        MENUITEM SEPARATOR
+        MENUITEM "����(&F)\tCtrl+F", ID_SHOW_FIND
+        MENUITEM "�u��(&R)\tCtrl+H", ID_SHOW_REPLACE
+        MENUITEM SEPARATOR
+        MENUITEM "�w��s�Ɉړ�(&G)\tCtrl+G", ID_GO_TO_LINE
+    }
+    POPUP "�ϊ�(&C)"
+    {
+        MENUITEM "�p���啶��(&U)\tCtrl+U", ID_UPPERCASE
+        MENUITEM "�p��������(&U)\tCtrl+Shift+U", ID_LOWERCASE
+    }
+    POPUP "�\\��(&V)"
+    {
+        MENUITEM "�Y�[�� �C��\tCtrl+[+]", ID_ZOOM_IN
+        MENUITEM "�Y�[�� �A�E�g\tCtrl+[-]", ID_ZOOM_OUT
+        MENUITEM SEPARATOR
+        MENUITEM "�Y�[�� 100%\tCtrl+0", ID_ZOOM_100
+        MENUITEM SEPARATOR
+        MENUITEM "�P��̐܂�Ԃ�\tAlt+Z", ID_WORD_WRAP_MODE
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // RT_DIALOG
 
 IDD_FIND_DIALOG DIALOGEX 0, 0, 240, 110
