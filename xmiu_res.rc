@@ -47,6 +47,8 @@ IDR_MAINACCEL ACCELERATORS
     "L", IDC_GO_TO_LINE, CONTROL, VIRTKEY
     "U", IDC_UPPERCASE, CONTROL, VIRTKEY
     "U", IDC_LOWERCASE, CONTROL, SHIFT, VIRTKEY
+    VK_ADD, IDC_ZOOM_IN, CONTROL, VIRTKEY
+    VK_OEM_PLUS, IDC_ZOOM_IN, CONTROL, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////
