@@ -5861,9 +5861,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_KEYDOWN:
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case VK_OEM_4:
-            g_editor.unindentLines();
-            return 0;
           case 'B':
             g_editor.jumpToMatchingBracket();
             return 0;
