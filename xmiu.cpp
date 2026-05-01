@@ -5097,6 +5097,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
     case WM_COMMAND:
       switch (LOWORD(wParam)) {
+        case IDC_DO_OPEN:
+          g_editor.openFile();
+          break;
         case IDC_DO_HELP:
           g_editor.showHelpPopup = !g_editor.showHelpPopup;
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5745,9 +5748,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'O':
-            g_editor.openFile();
-            return 0;
           case 'N':
             g_editor.newFile();
             return 0;
