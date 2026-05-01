@@ -26,6 +26,7 @@
 #define IDC_DO_SAVE                         1020
 #define IDC_DO_UNDO                         1021
 #define IDC_DO_REDO                         1022
+#define IDC_DO_COPY                         1023
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
