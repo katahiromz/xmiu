@@ -5185,6 +5185,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
+        case IDC_SELECT_ALL:
+          g_editor.rollbackPadding();
+          g_editor.cursors.clear();
+          g_editor.cursors.push_back({g_editor.pt.length(), 0, 0.0f});
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5823,13 +5829,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           case 'B':
             g_editor.jumpToMatchingBracket();
             return 0;
-          case 'A': {
-            g_editor.rollbackPadding();
-            g_editor.cursors.clear();
-            g_editor.cursors.push_back({g_editor.pt.length(), 0, 0.0f});
-            InvalidateRect(hwnd, NULL, FALSE);
-            return 0;
-          }
           case 'K':
             if (GetKeyState(VK_SHIFT) & 0x8000) {
               g_editor.deleteLines();

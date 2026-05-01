@@ -51,6 +51,7 @@ IDR_MAINACCEL ACCELERATORS
     VK_OEM_PLUS, IDC_ZOOM_IN, CONTROL, VIRTKEY
     VK_SUBTRACT, IDC_ZOOM_OUT, CONTROL, VIRTKEY
     VK_OEM_MINUS, IDC_ZOOM_OUT, CONTROL, VIRTKEY
+    "A", IDC_SELECT_ALL, CONTROL, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////
