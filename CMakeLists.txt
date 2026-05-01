@@ -40,7 +40,7 @@ if(MSVC)
 endif()
 
 # xmiu.exe
-add_executable(xmiu WIN32 Source.cpp miu.rc)
+add_executable(xmiu WIN32 miu.cpp miu_res.rc)
 target_compile_definitions(xmiu PRIVATE UNICODE _UNICODE)
 target_include_directories(xmiu PRIVATE compact_enc_det)
 target_link_libraries(xmiu d2d1 d3d11 dxgi dcomp dwrite dxguid imm32 comdlg32 comctl32 dwmapi uxtheme ced)
