@@ -63,6 +63,7 @@ IDR_MAINACCEL ACCELERATORS
     VK_TAB, IDC_UNINDENT, SHIFT, VIRTKEY
     VK_INSERT, IDC_DO_PASTE, SHIFT, VIRTKEY
     VK_DELETE, IDC_DELETE, VIRTKEY
+    VK_ESCAPE, IDC_ESCAPE, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////

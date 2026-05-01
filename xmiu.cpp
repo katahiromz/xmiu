@@ -5238,6 +5238,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.deleteForwardAtCursors();
           InvalidateRect(hwnd, NULL, FALSE);
           break;
+        case IDC_ESCAPE:
+          g_editor.rollbackPadding();
+          if (!g_editor.cursors.empty()) {
+            Cursor c = g_editor.cursors.back();
+            c.anchor = c.head;
+            g_editor.cursors.clear();
+            g_editor.cursors.push_back(c);
+            g_editor.isRectSelecting = false;
+            InvalidateRect(hwnd, NULL, FALSE);
+          }
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5866,18 +5877,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           default:
             break;
         }
-      }
-      if (wParam == VK_ESCAPE) {
-        g_editor.rollbackPadding();
-        if (!g_editor.cursors.empty()) {
-          Cursor c = g_editor.cursors.back();
-          c.anchor = c.head;
-          g_editor.cursors.clear();
-          g_editor.cursors.push_back(c);
-          g_editor.isRectSelecting = false;
-          InvalidateRect(hwnd, NULL, FALSE);
-        }
-        return 0;
       }
       if (g_editor.showHelpPopup) {
         g_editor.showHelpPopup = false;
