@@ -5249,12 +5249,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           break;
           case 'S':
         case ID_SAVE:
-          if (GetKeyState(VK_SHIFT) & 0x8000)
-            g_editor.saveFileAs();
-          else if (g_editor.currentFilePath.empty())
+          if (g_editor.currentFilePath.empty())
             g_editor.saveFileAs();
           else
             g_editor.saveFile(g_editor.currentFilePath);
+          break;
+        case ID_SAVE_AS:
+          g_editor.saveFileAs();
           break;
         case ID_HELP:
           g_editor.showHelpPopup = !g_editor.showHelpPopup;

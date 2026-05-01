@@ -16,6 +16,7 @@ IDR_MAINMENU MENU
         MENUITEM SEPARATOR
         MENUITEM "開く(&O)...\tCtrl+O", ID_OPEN
         MENUITEM "上書き保存(&S)\tCtrl+S", ID_SAVE
+        MENUITEM "名前を付けて保存(&A)\tCtrl+Shift+S", ID_SAVE_AS
         MENUITEM SEPARATOR
         MENUITEM "終了(&X)\tAlt+F4", ID_EXIT
     }
