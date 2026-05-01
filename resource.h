@@ -39,6 +39,8 @@
 #define IDC_SELECT_ALL                      1033
 #define IDC_MOVE_UP                         1034
 #define IDC_MOVE_SELECT_UP                  1035
+#define IDC_MOVE_DOWN                       1036
+#define IDC_MOVE_SELECT_DOWN                1037
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103

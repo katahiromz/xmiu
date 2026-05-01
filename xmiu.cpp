@@ -5199,6 +5199,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.rollbackPadding();
           g_editor.jumpToFileEdge(true, true);
           break;
+        case IDC_MOVE_DOWN:
+          g_editor.rollbackPadding();
+          g_editor.jumpToFileEdge(false, false);
+          break;
+        case IDC_MOVE_SELECT_DOWN:
+          g_editor.rollbackPadding();
+          g_editor.jumpToFileEdge(false, true);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5855,12 +5863,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
             return 0;
           }
-          case VK_DOWN: {
-            bool shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
-            g_editor.rollbackPadding();
-            g_editor.jumpToFileEdge(false, shift);
-          }
-            return 0;
           default:
             break;
         }
