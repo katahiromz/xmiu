@@ -34,6 +34,7 @@ IDR_MAINACCEL ACCELERATORS
     "R", IDC_SHOW_REPLACE, CONTROL, VIRTKEY
     "O", IDC_DO_OPEN, CONTROL, VIRTKEY
     "N", IDC_DO_NEW, CONTROL, VIRTKEY
+    "S", IDC_DO_SAVE, CONTROL, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////

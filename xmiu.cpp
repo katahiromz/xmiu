@@ -5103,6 +5103,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case IDC_DO_OPEN:
           g_editor.openFile();
           break;
+          case 'S':
+        case IDC_DO_SAVE:
+          if (GetKeyState(VK_SHIFT) & 0x8000)
+            g_editor.saveFileAs();
+          else if (g_editor.currentFilePath.empty())
+            g_editor.saveFileAs();
+          else
+            g_editor.saveFile(g_editor.currentFilePath);
+          break;
         case IDC_DO_HELP:
           g_editor.showHelpPopup = !g_editor.showHelpPopup;
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5751,14 +5760,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (wParam) {
-          case 'S':
-            if (GetKeyState(VK_SHIFT) & 0x8000)
-              g_editor.saveFileAs();
-            else if (g_editor.currentFilePath.empty())
-              g_editor.saveFileAs();
-            else
-              g_editor.saveFile(g_editor.currentFilePath);
-            return 0;
           case 'Z':
             g_editor.performUndo();
             return 0;
