@@ -27,7 +27,7 @@
 #include <cstring>
 #include "compact_enc_det/compact_enc_det.h"
 #include "resource.h"
-const std::wstring APP_VERSION = L"miu v1.0.23";
+const std::wstring APP_VERSION = L"xmiu v1.0.23";
 enum MiuEncoding {
   ENC_UTF8_NOBOM = 0,
   ENC_UTF8_BOM,
@@ -6045,7 +6045,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     if (GetFullPathNameW(argv[1], MAX_PATH, fullPath, NULL)) {
       fileToOpen = fullPath;
       HWND hExisting = NULL;
-      HWND hwndEnum = FindWindowExW(NULL, NULL, L"miu", NULL);
+      HWND hwndEnum = FindWindowExW(NULL, NULL, L"xmiu", NULL);
       while (hwndEnum != NULL) {
         COPYDATASTRUCT cds;
         cds.dwData = 1;
@@ -6055,7 +6055,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
           hExisting = hwndEnum;
           break;
         }
-        hwndEnum = FindWindowExW(NULL, hwndEnum, L"miu", NULL);
+        hwndEnum = FindWindowExW(NULL, hwndEnum, L"xmiu", NULL);
       }
       if (hExisting) {
         if (IsIconic(hExisting)) ShowWindow(hExisting, SW_RESTORE);
@@ -6068,7 +6068,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   WNDCLASS wc = {0};
   wc.lpfnWndProc = WndProc;
   wc.hInstance = hInstance;
-  wc.lpszClassName = L"miu";
+  wc.lpszClassName = L"xmiu";
   wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
   RegisterClass(&wc);
   UINT dpi = GetDpiForSystem();
@@ -6076,7 +6076,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   int initialWidth = MulDiv(800, dpi, 96);
   int initialHeight = MulDiv(640, dpi, 96);
   HWND hwnd =
-      CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP, wc.lpszClassName, L"miu",
+      CreateWindowEx(WS_EX_NOREDIRECTIONBITMAP, wc.lpszClassName, L"xmiu",
                      WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
                      initialWidth, initialHeight, NULL, NULL, hInstance, NULL);
   if (!hwnd) return 0;

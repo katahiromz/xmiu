@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Unbenannt"
     IDS_HELP_TEXT, "\n\n[Tastenkombinationen]\nF1                  Hilfe\nStrg+N              Neu\nStrg+O / Drag&Drop  Öffnen\nStrg+S              Speichern\nStrg+Umschalt+S     Speichern unter\nStrg+F              Suchen\nStrg+H              Ersetzen\nF3 / Umschalt+F3    Weitersuchen / Vorheriges\nStrg+G              Gehe zu Zeile\nStrg+Z/Y            Rückgängig / Wiederherstellen\nStrg+X/C/V          Ausschneiden / Kopieren / Einfügen\nStrg+Umschalt+K     Zeile löschen\nStrg+U              Großbuchstaben\nStrg+Umschalt+U     Kleinbuchstaben\nAlt+Auf/Ab          Zeile verschieben\nAlt+Umschalt+Auf/Ab Zeile kopieren\nStrg+D              Wort markieren / Nächstes\nStrg+A              Alles markieren\nAlt+Ziehen          Rechteckauswahl\nAlt+Z               Zeilenumbruch\nStrg+Mausrad/+/-    Zoom\nStrg+0              Zoom zurücksetzen\nF11                 Vollbild\n"
     IDS_FIND_TITLE, "Suchen"

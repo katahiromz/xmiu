@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Sem título"
     IDS_HELP_TEXT, "\n\n[Atalhos]\nF1                  Ajuda\nCtrl+N              Novo\nCtrl+O / Arrastar   Abrir\nCtrl+S              Salvar\nCtrl+Shift+S        Salvar Como\nCtrl+F              Localizar\nCtrl+H              Substituir\nF3 / Shift+F3       Localizar Próximo/Anterior\nCtrl+G              Ir Para a Linha\nCtrl+B              Ir para o parêntese correspondente\nCtrl+Z/Y            Desfazer/Refazer\nCtrl+X/C/V          Recortar/Copiar/Colar\nCtrl+Shift+K        Excluir Linha\nCtrl+U              Maiúsculas\nCtrl+Shift+U        Minúsculas\nAlt+Cima/Baixo      Mover Linha\nAlt+Shift+Cima/Baixo Copiar Linha\nCtrl+D              Selecionar Palavra / Próxima\nCtrl+A              Selecionar Tudo\nAlt+Arrastar        Seleção Retangular\nAlt+Z               Quebra de Linha\nCtrl+Roda/+/-       Zoom\nCtrl+0              Redefinir Zoom\nF11                 Tela Cheia\n"
     IDS_FIND_TITLE, "Localizar"

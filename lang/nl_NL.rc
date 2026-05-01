@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Naamloos"
     IDS_HELP_TEXT, "\n\n[Sneltoetsen]\nF1                  Help\nCtrl+N              Nieuw\nCtrl+O / Drag&Drop  Openen\nCtrl+S              Opslaan\nCtrl+Shift+S        Opslaan als\nCtrl+F              Zoeken\nCtrl+H              Vervangen\nF3 / Shift+F3       Volgende/vorige zoeken\nCtrl+G              Ga naar regel\nCtrl+B              Ga naar bijbehorend haakje\nCtrl+Z/Y            Ongedaan maken/Opnieuw\nCtrl+X/C/V          Knippen/Kopiëren/Plakken\nCtrl+Shift+K        Regel verwijderen\nCtrl+U              Hoofdletters\nCtrl+Shift+U        Kleine letters\nAlt+Up/Down         Regel verplaatsen\nAlt+Shift+Up/Down   Regel kopiëren\nCtrl+D              Woord selecteren / Volgende\nCtrl+A              Alles selecteren\nAlt+Drag            Rechthoekige selectie\nAlt+Z               Tekstterugloop\nCtrl+Wheel/+/-      Zoomen\nCtrl+0              Zoom herstellen\nF11                 Volledig scherm\n"
     IDS_FIND_TITLE, "Zoeken"

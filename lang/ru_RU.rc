@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Безымянный"
     IDS_HELP_TEXT, "\n\n[Горячие клавиши]\nF1                  Справка\nCtrl+N              Создать\nCtrl+O / Drag&Drop  Открыть\nCtrl+S              Сохранить\nCtrl+Shift+S        Сохранить как\nCtrl+F              Найти\nCtrl+H              Заменить\nF3 / Shift+F3       Найти далее/назад\nCtrl+G              Перейти к строке\nCtrl+B              Перейти к парной скобке\nCtrl+Z/Y            Отменить/Повторить\nCtrl+X/C/V          Вырезать/Копировать/Вставить\nCtrl+Shift+K        Удалить строку\nCtrl+U              ВЕРХНИЙ РЕГИСТР\nCtrl+Shift+U        нижний регистр\nAlt+Up/Down         Переместить строку\nAlt+Shift+Up/Down   Копировать строку\nCtrl+D              Выделить слово / след.\nCtrl+A              Выделить все\nAlt+Drag            Прямоугольное выделение\nAlt+Z               Перенос по словам\nCtrl+Wheel/+/-      Масштаб\nCtrl+0              Сбросить масштаб\nF11                 Полноэкранный режим\n"
     IDS_FIND_TITLE, "Найти"

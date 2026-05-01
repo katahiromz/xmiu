@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Adsız"
     IDS_HELP_TEXT, "\n\n[Shortcuts]\nF1                  Yardım\nCtrl+N              Yeni\nCtrl+O / Drag&Drop  Aç\nCtrl+S              Kaydet\nCtrl+Shift+S        Farklı Kaydet\nCtrl+F              Bul\nCtrl+H              Değiştir\nF3 / Shift+F3       Sonrakini/Öncekini Bul\nCtrl+G              Satıra Git\nCtrl+B              Eşleşen paranteze atla\nCtrl+Z/Y            Geri Al/Yinele\nCtrl+X/C/V          Kes/Kopyala/Yapıştır\nCtrl+Shift+K        Satırı Sil\nCtrl+U              Büyük Harf\nCtrl+Shift+U        Küçük Harf\nAlt+Up/Down         Satırı Taşı\nAlt+Shift+Up/Down   Satırı Kopyala\nCtrl+D              Kelimeyi Seç / Sonraki\nCtrl+A              Tümünü Seç\nAlt+Drag            Dikdörtgen Seçim\nAlt+Z               Sözcük Kaydırma\nCtrl+Wheel/+/-      Yakınlaştır\nCtrl+0              Yakınlaştırmayı Sıfırla\nF11                 Tam Ekran\n"
     IDS_FIND_TITLE, "Bul"

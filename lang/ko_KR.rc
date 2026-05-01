@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "제목 없음"
     IDS_HELP_TEXT, "\n\n[단축키]\nF1                  도움말\nCtrl+N              새로 만들기\nCtrl+O / Drag&Drop  열기\nCtrl+S              저장\nCtrl+Shift+S        다른 이름으로 저장\nCtrl+F              찾기\nCtrl+H              바꾸기\nF3 / Shift+F3       다음/이전 찾기\nCtrl+G              줄 이동\nCtrl+B              일치하는 괄호로 이동\nCtrl+Z/Y            실행 취소/다시 실행\nCtrl+X/C/V          잘라내기/복사/붙여넣기\nCtrl+Shift+K        줄 삭제\nCtrl+U              대문자로 변환\nCtrl+Shift+U        소문자로 변환\nAlt+Up/Down         줄 이동\nAlt+Shift+Up/Down   줄 복사\nCtrl+D              단어 선택 / 다음\nCtrl+A              모두 선택\nAlt+Drag            사각형 선택\nAlt+Z               자동 줄바꿈\nCtrl+Wheel/+/-      확대/축소\nCtrl+0              확대/축소 초기화\nF11                 전체 화면\n"
     IDS_FIND_TITLE, "찾기"

@@ -41,7 +41,7 @@ FONT 9, "Segoe UI", 400, 0, 1
 
 STRINGTABLE
 {
-    IDS_APP_TITLE, "miu"
+    IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "未命名"
     IDS_HELP_TEXT, "\n\n[快速鍵]\nF1                  說明\nCtrl+N              新增\nCtrl+O / 拖放       開啟\nCtrl+S              儲存\nCtrl+Shift+S        另存新檔\nCtrl+F              尋找\nCtrl+H              取代\nF3 / Shift+F3       尋找下一個/上一個\nCtrl+G              移至行\nCtrl+B              跳轉到匹配的括號\nCtrl+Z/Y            復原/重做\nCtrl+X/C/V          剪下/複製/貼上\nCtrl+Shift+K        刪除整行\nCtrl+U              轉換為大寫\nCtrl+Shift+U        轉換為小寫\nAlt+Up/Down         上移/下移行\nAlt+Shift+Up/Down   向上/向下複製行\nCtrl+D              選取單字 / 下一個相符項\nCtrl+A              全選\nAlt+拖曳            矩形選取\nAlt+Z               自動換行\nCtrl+滾輪/+/-       縮放\nCtrl+0              重設縮放\nF11                 全螢幕\n"
     IDS_FIND_TITLE, "尋找"
