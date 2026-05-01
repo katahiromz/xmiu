@@ -64,6 +64,7 @@ IDR_MAINACCEL ACCELERATORS
     VK_INSERT, IDC_DO_PASTE, SHIFT, VIRTKEY
     VK_DELETE, IDC_DELETE, VIRTKEY
     VK_ESCAPE, IDC_ESCAPE, VIRTKEY
+    "Z", IDC_WORD_WRAP_MODE, ALT, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////

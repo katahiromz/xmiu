@@ -5249,6 +5249,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
+        case IDC_WORD_WRAP_MODE:
+          g_editor.wordWrapEnabled = !g_editor.wordWrapEnabled;
+          if (g_editor.wordWrapEnabled) g_editor.hScrollPos = 0;
+          g_editor.updateScrollBars();
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5838,13 +5844,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_SYSCHAR:
       return 0;
     case WM_SYSKEYDOWN:
-      if (wParam == 'Z') {
-        g_editor.wordWrapEnabled = !g_editor.wordWrapEnabled;
-        if (g_editor.wordWrapEnabled) g_editor.hScrollPos = 0;
-        g_editor.updateScrollBars();
-        InvalidateRect(hwnd, NULL, FALSE);
-        return 0;
-      }
       if (wParam == VK_UP || wParam == VK_DOWN) {
         bool shift = (GetKeyState(VK_SHIFT) & 0x8000);
         if (shift)

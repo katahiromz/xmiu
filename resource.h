@@ -47,6 +47,7 @@
 #define IDC_UNINDENT                        1041
 #define IDC_DELETE                          1042
 #define IDC_ESCAPE                          1043
+#define IDC_WORD_WRAP_MODE                  1044
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
