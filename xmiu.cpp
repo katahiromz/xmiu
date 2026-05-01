@@ -5219,6 +5219,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             InvalidateRect(hwnd, NULL, FALSE);
           }
           break;
+        case IDC_INSERT_MODE:
+          g_editor.isOverwriteMode = !g_editor.isOverwriteMode;
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5827,14 +5831,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         return DefWindowProc(hwnd, msg, wParam, lParam);
       break;
     case WM_KEYDOWN:
-      if (wParam == VK_INSERT) {
-        if (!(GetKeyState(VK_CONTROL) & 0x8000) &&
-            !(GetKeyState(VK_SHIFT) & 0x8000)) {
-          g_editor.isOverwriteMode = !g_editor.isOverwriteMode;
-          InvalidateRect(hwnd, NULL, FALSE);
-          return 0;
-        }
-      }
       if (wParam == VK_TAB) {
         if (GetKeyState(VK_SHIFT) & 0x8000)
           g_editor.unindentLines();
