@@ -26,6 +26,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 IDR_MAINACCEL ACCELERATORS
 {
     VK_F1, IDC_DO_HELP, VIRTKEY
+    VK_F11, IDC_TOGGLE_FULLSCREEN, VIRTKEY
 }
 
 //////////////////////////////////////////////////////////////////////////////

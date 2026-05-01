@@ -5101,6 +5101,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.showHelpPopup = !g_editor.showHelpPopup;
           InvalidateRect(hwnd, NULL, FALSE);
           break;
+        case IDC_TOGGLE_FULLSCREEN:
+          g_editor.toggleFullScreen();
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -6113,10 +6116,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
       if (msg.wParam == VK_F3) {
         bool shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
         g_editor.findNext(!shift);
-        continue;
-      }
-      if (msg.wParam == VK_F11) {
-        g_editor.toggleFullScreen();
         continue;
       }
       if (GetKeyState(VK_CONTROL) & 0x8000) {

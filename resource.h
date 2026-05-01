@@ -16,6 +16,7 @@
 #define IDC_REPLACE_LABEL                   1010
 #define IDC_GOTO_LABEL                      1011
 #define IDC_GOTO_EDIT                       1012
+#define IDC_TOGGLE_FULLSCREEN               1013
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
