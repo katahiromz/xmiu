@@ -50,13 +50,15 @@ struct DetectResult {
 };
 static float pointsFromFontHeight(LONG lfHeight, INT dpi = 96) {
   HDC hDC = GetDC(NULL);
-  float points = (float)MulDiv(labs(lfHeight), dpi, GetDeviceCaps(hDC, LOGPIXELSY));
+  float points =
+      (float)MulDiv(labs(lfHeight), dpi, GetDeviceCaps(hDC, LOGPIXELSY));
   ReleaseDC(NULL, hDC);
   return points;
 }
 static LONG fontHeightFromPoints(float points, INT dpi = 96) {
   HDC hDC = GetDC(NULL);
-  LONG lfHeight = -MulDiv((INT)std::round(points), GetDeviceCaps(hDC, LOGPIXELSY), dpi);
+  LONG lfHeight =
+      -MulDiv((INT)std::round(points), GetDeviceCaps(hDC, LOGPIXELSY), dpi);
   ReleaseDC(NULL, hDC);
   return lfHeight;
 }
@@ -840,11 +842,20 @@ struct Editor {
   std::vector<ID2D1SolidColorBrush*> regexBrushes;
   FILETIME lastWriteTime = {0, 0};
   bool isCheckingModification = false;
-  LOGFONTW LogFont = { 
-	-14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
-	DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-	DEFAULT_QUALITY, FIXED_PITCH | FF_DONTCARE, L"ＭＳ ゴシック"
-  };
+  LOGFONTW LogFont = {-14,
+                      0,
+                      0,
+                      0,
+                      FW_NORMAL,
+                      FALSE,
+                      FALSE,
+                      FALSE,
+                      DEFAULT_CHARSET,
+                      OUT_DEFAULT_PRECIS,
+                      CLIP_DEFAULT_PRECIS,
+                      DEFAULT_QUALITY,
+                      FIXED_PITCH | FF_DONTCARE,
+                      L"ＭＳ ゴシック"};
   void updateFileTime() {
     if (currentFilePath.empty()) {
       lastWriteTime = {0, 0};
@@ -1643,13 +1654,16 @@ regex_color: 0.8 0.4 0.2 1.0
     updateWindowIcon();
   }
   void saveLogFont() {
-    SHSetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu", L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
+    SHSetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu",
+               L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
   }
   BOOL loadLogFont() {
     LOGFONTW lf;
     DWORD cbValue = sizeof(lf);
     LSTATUS error;
-    error = SHGetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu", L"LogFont", NULL, &lf, &cbValue);
+    error =
+        SHGetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu",
+                   L"LogFont", NULL, &lf, &cbValue);
     if (!error) {
       LogFont = lf;
       currentFontSize = pointsFromFontHeight(LogFont.lfHeight);
@@ -1668,11 +1682,11 @@ regex_color: 0.8 0.4 0.2 1.0
     }
     LogFont.lfHeight = fontHeightFromPoints(size);
     DWRITE_FONT_STYLE fontStyle = DWRITE_FONT_STYLE_NORMAL;
-    if (LogFont.lfItalic)
-      fontStyle = DWRITE_FONT_STYLE_ITALIC;
-    dwFactory->CreateTextFormat(
-        LogFont.lfFaceName, NULL, (DWRITE_FONT_WEIGHT)LogFont.lfWeight, fontStyle,
-        DWRITE_FONT_STRETCH_NORMAL, currentFontSize, L"en-us", &textFormat);
+    if (LogFont.lfItalic) fontStyle = DWRITE_FONT_STYLE_ITALIC;
+    dwFactory->CreateTextFormat(LogFont.lfFaceName, NULL,
+                                (DWRITE_FONT_WEIGHT)LogFont.lfWeight, fontStyle,
+                                DWRITE_FONT_STRETCH_NORMAL, currentFontSize,
+                                L"en-us", &textFormat);
     lineHeight = currentFontSize * 1.25f;
     if (textFormat) {
       textFormat->SetLineSpacing(DWRITE_LINE_SPACING_METHOD_UNIFORM, lineHeight,
@@ -5364,57 +5378,55 @@ regex_color: 0.8 0.4 0.2 1.0
     InvalidateRect(hwnd, NULL, FALSE);
   }
   static INT_PTR CALLBACK ConfigDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
-                                           LPARAM lParam)
-  {
-    Editor *pEditor = (Editor *)GetWindowLongPtr(hwnd, DWLP_USER);
+                                           LPARAM lParam) {
+    Editor* pEditor = (Editor*)GetWindowLongPtr(hwnd, DWLP_USER);
     static LOGFONT s_lf;
     WCHAR text[MAX_PATH];
     switch (uMsg) {
-    case WM_INITDIALOG:
-      {
-        PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
+      case WM_INITDIALOG: {
+        PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
         pEditor = (Editor*)psp->lParam;
         s_lf = pEditor->LogFont;
         SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)pEditor);
         float fontSize = pointsFromFontHeight(s_lf.lfHeight, 72);
-        swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
+        swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName,
+                 fontSize);
         SetDlgItemTextW(hwnd, edt1, text);
         CenterWindowDx(GetParent(hwnd));
       }
-      return TRUE;
-    case WM_COMMAND:
-      switch (LOWORD(wParam)) {
-      case psh1:
-        {
-          LOGFONT lf = s_lf;
-          CHOOSEFONT cf = { sizeof(cf) };
-          cf.hwndOwner = hwnd;
-          cf.lpLogFont = &lf;
-          cf.Flags = CF_INITTOLOGFONTSTRUCT | CF_NOSCRIPTSEL | CF_NOVERTFONTS;
-          if (ChooseFont(&cf)) {
-            s_lf = lf;
-            float fontSize = pointsFromFontHeight(s_lf.lfHeight, 72);
-            swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
-            SetDlgItemTextW(hwnd, edt1, text);
-            PropSheet_Changed(GetParent(hwnd), hwnd);
+        return TRUE;
+      case WM_COMMAND:
+        switch (LOWORD(wParam)) {
+          case psh1: {
+            LOGFONT lf = s_lf;
+            CHOOSEFONT cf = {sizeof(cf)};
+            cf.hwndOwner = hwnd;
+            cf.lpLogFont = &lf;
+            cf.Flags = CF_INITTOLOGFONTSTRUCT | CF_NOSCRIPTSEL | CF_NOVERTFONTS;
+            if (ChooseFont(&cf)) {
+              s_lf = lf;
+              float fontSize = pointsFromFontHeight(s_lf.lfHeight, 72);
+              swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName,
+                       fontSize);
+              SetDlgItemTextW(hwnd, edt1, text);
+              PropSheet_Changed(GetParent(hwnd), hwnd);
+            }
+            break;
           }
-          break;
         }
-      }
-      break;
-    case WM_NOTIFY:
-      switch (((NMHDR *)lParam)->code) {
-      case PSN_APPLY:
-        {
-          pEditor->LogFont = s_lf;
-          float fontSize = pointsFromFontHeight(s_lf.lfHeight);
-          pEditor->updateFont(fontSize);
-          InvalidateRect(pEditor->hwnd, NULL, TRUE);
-          SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
-          return TRUE;
+        break;
+      case WM_NOTIFY:
+        switch (((NMHDR*)lParam)->code) {
+          case PSN_APPLY: {
+            pEditor->LogFont = s_lf;
+            float fontSize = pointsFromFontHeight(s_lf.lfHeight);
+            pEditor->updateFont(fontSize);
+            InvalidateRect(pEditor->hwnd, NULL, TRUE);
+            SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
+            return TRUE;
+          }
         }
-      }
-      break;
+        break;
     }
     return 0;
   }
@@ -5705,30 +5717,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           DialogBox(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDD_ABOUT), hwnd,
                     AboutDialogProc);
           break;
-        case ID_CONFIG:
-          {
-            PROPSHEETPAGE pages[1] = {};
+        case ID_CONFIG: {
+          PROPSHEETPAGE pages[1] = {};
 
-            pages[0].dwSize      = sizeof(PROPSHEETPAGE);
-            pages[0].dwFlags     = PSP_DEFAULT;
-            pages[0].hInstance   = GetModuleHandleW(NULL);
-            pages[0].pszTemplate = MAKEINTRESOURCEW(IDD_CONFIG);
-            pages[0].pfnDlgProc  = Editor::ConfigDialogProc;
-            pages[0].lParam      = (LPARAM)&g_editor;
+          pages[0].dwSize = sizeof(PROPSHEETPAGE);
+          pages[0].dwFlags = PSP_DEFAULT;
+          pages[0].hInstance = GetModuleHandleW(NULL);
+          pages[0].pszTemplate = MAKEINTRESOURCEW(IDD_CONFIG);
+          pages[0].pfnDlgProc = Editor::ConfigDialogProc;
+          pages[0].lParam = (LPARAM)&g_editor;
 
-            std::wstring strTitle = GetResString(IDS_CONFIG);
-            PROPSHEETHEADER psh = {};
-            psh.dwSize     = sizeof(PROPSHEETHEADER);
-            psh.dwFlags    = PSH_PROPSHEETPAGE;
-            psh.hwndParent = hwnd;
-            psh.hInstance  = GetModuleHandleW(NULL);
-            psh.pszCaption = strTitle.c_str();
-            psh.nPages     = _countof(pages);
-            psh.ppsp       = pages;
+          std::wstring strTitle = GetResString(IDS_CONFIG);
+          PROPSHEETHEADER psh = {};
+          psh.dwSize = sizeof(PROPSHEETHEADER);
+          psh.dwFlags = PSH_PROPSHEETPAGE;
+          psh.hwndParent = hwnd;
+          psh.hInstance = GetModuleHandleW(NULL);
+          psh.pszCaption = strTitle.c_str();
+          psh.nPages = _countof(pages);
+          psh.ppsp = pages;
 
-            PropertySheet(&psh);
-          }
-          break;
+          PropertySheet(&psh);
+        } break;
       }
       break;
     case WM_SETCURSOR: {
