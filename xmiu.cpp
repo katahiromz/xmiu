@@ -1708,6 +1708,8 @@ regex_color: 0.8 0.4 0.2 1.0
       }
       title += fileName;
     }
+    title += L" - ";
+    title += GetResString(IDS_APP_TITLE);
     SetWindowTextW(hwnd, title.c_str());
   }
   void updateWindowIcon() {
