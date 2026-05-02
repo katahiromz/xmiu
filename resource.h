@@ -65,7 +65,6 @@
 #define ID_COPY                             10023
 #define ID_CUT                              10024
 #define ID_PASTE                            10025
-#define ID_SELECT_NEXT_OCCURRENCE           10026
 #define ID_GO_TO_LINE                       10027
 #define ID_DELETE_LINES                     10028
 #define ID_UPPERCASE                        10029
@@ -125,12 +124,13 @@
 #define ID_BACK                             10088
 #define ID_BACK_CONTROL                     10089
 #define ID_DELETE_CONTROL                   10090
+#define ID_FILE_PROP                        10091
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    102
-        #define _APS_NEXT_COMMAND_VALUE     10091
+        #define _APS_NEXT_COMMAND_VALUE     10092
         #define _APS_NEXT_CONTROL_VALUE     1013
         #define _APS_NEXT_SYMED_VALUE       300
     #endif

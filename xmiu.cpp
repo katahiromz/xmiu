@@ -5524,9 +5524,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_PASTE:
           g_editor.pasteFromClipboard();
           break;
-        case ID_SELECT_NEXT_OCCURRENCE:
-          g_editor.selectNextOccurrence();
-          break;
         case ID_GO_TO_LINE:
           g_editor.showGoToDialog();
           break;
@@ -5804,6 +5801,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                           MB_ICONINFORMATION | MB_YESNOCANCEL) == IDYES)
           {
             g_editor.killConfig();
+          }
+          break;
+        case ID_FILE_PROP:
+          {
+            SHELLEXECUTEINFO sei = { sizeof(sei) };
+            sei.hwnd   = hwnd;
+            sei.lpVerb = L"properties";
+            sei.lpFile = g_editor.currentFilePath.c_str();
+            sei.fMask  = SEE_MASK_INVOKEIDLIST;
+            ShellExecuteEx(&sei);
           }
           break;
       }
