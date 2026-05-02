@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "檔案已被外部程式修改。\n是否重新載入？"
     IDS_FILE_CHANGED_WARN, "\n(警告：未儲存的變更將會遺失)"
     IDS_FILE_CHANGED_TITLE, "偵測到檔案已變更"
+    IDS_README, "README_zh_TW.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "파일이 외부에서 수정되었습니다.\n다시 불러오시겠습니까?"
     IDS_FILE_CHANGED_WARN, "\n(경고: 저장하지 않은 변경 사항은 손실됩니다)"
     IDS_FILE_CHANGED_TITLE, "파일 수정 감지됨"
+    IDS_README, "README_ko.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////

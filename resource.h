@@ -44,6 +44,7 @@
 #define IDS_FILE_CHANGED_EXT                121
 #define IDS_FILE_CHANGED_WARN               122
 #define IDS_FILE_CHANGED_TITLE              123
+#define IDS_README                          124
 
 #define ID_HELP                             10000
 #define ID_EXIT                             10001
@@ -114,12 +115,13 @@
 #define ID_MOVE_SHIFT_NEXT                  10081
 #define ID_MOVE_CONTROL_NEXT                10082
 #define ID_MOVE_CONTROL_SHIFT_NEXT          10083
+#define ID_OPEN_README                      10084
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    102
-        #define _APS_NEXT_COMMAND_VALUE     10084
+        #define _APS_NEXT_COMMAND_VALUE     10085
         #define _APS_NEXT_CONTROL_VALUE     1013
         #define _APS_NEXT_SYMED_VALUE       300
     #endif

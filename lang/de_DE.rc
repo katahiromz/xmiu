@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "Die Datei wurde extern geändert.\nMöchten Sie sie neu laden?"
     IDS_FILE_CHANGED_WARN, "\n(Warnung: Nicht gespeicherte Änderungen gehen verloren)"
     IDS_FILE_CHANGED_TITLE, "Dateiänderung erkannt"
+    IDS_README, "README_de.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////

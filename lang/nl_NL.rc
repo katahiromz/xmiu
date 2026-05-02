@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "Het bestand is extern gewijzigd.\nWilt u het opnieuw laden?"
     IDS_FILE_CHANGED_WARN, "\n(Waarschuwing: Niet-opgeslagen wijzigingen gaan verloren)"
     IDS_FILE_CHANGED_TITLE, "Bestandswijziging gedetecteerd"
+    IDS_README, "README_nl.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////

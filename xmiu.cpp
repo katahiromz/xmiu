@@ -20,6 +20,7 @@
 #include <commctrl.h>
 #include <dwmapi.h>
 #include <uxtheme.h>
+#include <shlwapi.h>
 #include <string>
 #include <vector>
 #include <memory>
@@ -218,6 +219,25 @@ static std::string WToUTF8(const std::wstring& w) {
   WideCharToMultiByte(CP_UTF8, 0, w.data(), (int)w.size(), &s[0], n, NULL,
                       NULL);
   return s;
+}
+static std::wstring FindLocalFile(LPCWSTR pszFileName) {
+  WCHAR szPath[MAX_PATH];
+  GetModuleFileNameW(NULL, szPath, _countof(szPath));
+  PathRemoveFileSpecW(szPath);
+  PathAppend(szPath, pszFileName);
+  if (PathFileExistsW(szPath))
+    return szPath;
+  PathRemoveFileSpecW(szPath);
+  PathRemoveFileSpecW(szPath);
+  PathAppend(szPath, pszFileName);
+  if (PathFileExistsW(szPath))
+    return szPath;
+  PathRemoveFileSpecW(szPath);
+  PathRemoveFileSpecW(szPath);
+  PathAppend(szPath, pszFileName);
+  if (PathFileExistsW(szPath))
+    return szPath;
+  return pszFileName;
 }
 static std::string UnescapeString(const std::string& s,
                                   const std::string& newline) {
@@ -5544,6 +5564,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           break;
         case ID_EXIT:
           PostMessageW(hwnd, WM_CLOSE, 0, 0);
+          break;
+        case ID_OPEN_README:
+          {
+            std::wstring strReadMe = GetResString(IDS_README);
+            std::wstring strPath = FindLocalFile(strReadMe.c_str());
+            ShellExecuteW(hwnd, NULL, L"notepad.exe", strPath.c_str(), NULL, SW_SHOWNORMAL);
+          }
           break;
       }
       break;

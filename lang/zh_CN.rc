@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "文件已被外部修改。\n是否重新加载？"
     IDS_FILE_CHANGED_WARN, "\n(警告：未保存的更改将丢失)"
     IDS_FILE_CHANGED_TITLE, "检测到文件修改"
+    IDS_README, "README_zh_CN.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////

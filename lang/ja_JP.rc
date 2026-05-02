@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "ファイルが外部で変更されました。\n再読み込みしますか？"
     IDS_FILE_CHANGED_WARN, "\n(警告: 未保存の変更は破棄されます)"
     IDS_FILE_CHANGED_TITLE, "ファイルの変更検知"
+    IDS_README, "README_ja.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////

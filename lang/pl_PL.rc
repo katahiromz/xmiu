@@ -53,7 +53,7 @@ IDR_MAINMENU MENU
     }
     POPUP "ヘルプ(&H)"
     {
-        MENUITEM "ヘルプ(&H)", ID_HELP
+        MENUITEM "READMEを開く(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
         MENUITEM "バージョン情報(&A)...", ID_HELP
     }
@@ -115,6 +115,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_EXT, "Plik został zmodyfikowany przez inny program.\nCzy chcesz go przeładować?"
     IDS_FILE_CHANGED_WARN, "\n(Ostrzeżenie: Niezapisane zmiany zostaną utracone)"
     IDS_FILE_CHANGED_TITLE, "Wykryto modyfikację pliku"
+    IDS_README, "README_pl.txt"
 }
 
 //////////////////////////////////////////////////////////////////////////////
