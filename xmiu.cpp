@@ -5466,7 +5466,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         std::wstring reqPath = (const wchar_t*)pcds->lpData;
         if (!g_editor.currentFilePath.empty() &&
             _wcsicmp(g_editor.currentFilePath.c_str(), reqPath.c_str()) == 0) {
-          return 1;
+          return 0xBEEF;
         }
       }
       return 0;
@@ -5879,6 +5879,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       int w = rc.right - rc.left;
       int h = rc.bottom - rc.top;
       if (w > 0 && h > 0) g_editor.resizeSwapChain(w, h);
+      if (IsIconic(hwnd))
+        break;
       GetWindowRect(hwnd, &rc);
       INT WindowCX = rc.right - rc.left;
       INT WindowCY = rc.bottom - rc.top;
@@ -5886,6 +5888,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowCY", REG_DWORD, &WindowCY, sizeof(WindowCY));
     } break;
     case WM_MOVE: {
+      if (IsIconic(hwnd))
+        break;
       RECT rc;
       GetWindowRect(hwnd, &rc);
       INT WindowX = rc.left, WindowY = rc.top;
@@ -6448,7 +6452,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         cds.dwData = 1;
         cds.cbData = (DWORD)((fileToOpen.length() + 1) * sizeof(wchar_t));
         cds.lpData = (PVOID)fileToOpen.c_str();
-        if (SendMessage(hwndEnum, WM_COPYDATA, 0, (LPARAM)&cds) == 1) {
+        if (SendMessage(hwndEnum, WM_COPYDATA, 0, (LPARAM)&cds) == 0xBEEF) {
           hExisting = hwndEnum;
           break;
         }
