@@ -1658,6 +1658,7 @@ regex_color: 0.8 0.4 0.2 1.0
                L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
   }
   BOOL loadLogFont() {
+    currentFontSize = pointsFromFontHeight(-14);
     LOGFONTW lf;
     DWORD cbValue = sizeof(lf);
     LSTATUS error;
