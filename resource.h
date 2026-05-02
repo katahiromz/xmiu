@@ -47,6 +47,7 @@
 #define IDS_FILE_CHANGED_WARN               122
 #define IDS_FILE_CHANGED_TITLE              123
 #define IDS_README                          124
+#define IDS_CONFIG                          125
 
 #define ID_EXIT                             10001
 #define ID_SAVE_AS                          10002

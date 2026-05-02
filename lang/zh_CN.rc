@@ -104,15 +104,13 @@ FONT 9, "Segoe UI", 400, 0, 1
 }
 
 IDD_CONFIG DIALOG 0, 0, 224, 135
-CAPTION "xmiu の設定"
+CAPTION "全般"
 STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_CAPTION
 FONT 9, "MS UI Gothic"
 {
     RTEXT "フォント(&F):", -1, 5, 10, 55, 10
     EDITTEXT edt1, 70, 5, 95, 15, ES_READONLY
     PUSHBUTTON "変更(&C)...", psh1, 170, 5, 45, 15
-    DEFPUSHBUTTON "OK", IDOK, 95, 115, 60, 15
-    PUSHBUTTON "キャンセル", IDCANCEL, 160, 115, 60, 15
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -140,6 +138,7 @@ STRINGTABLE
     IDS_FILE_CHANGED_WARN, "\n(警告：未保存的更改将丢失)"
     IDS_FILE_CHANGED_TITLE, "检测到文件修改"
     IDS_README, "README_zh_CN.txt"
+    IDS_CONFIG, "xmiu の設定"
 }
 
 //////////////////////////////////////////////////////////////////////////////
