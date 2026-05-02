@@ -37,7 +37,8 @@
 #include "compact_enc_det/compact_enc_det.h"
 #include "resource.h"
 const std::wstring APP_VERSION = L"xmiu v1.0.23";
-#define DEFAULT_FONT_HEIGHT (-14)
+#define DEFAULT_FONT_HEIGHT (-16)
+#define APP_KEY L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu"
 enum MiuEncoding {
   ENC_UTF8_NOBOM = 0,
   ENC_UTF8_BOM,
@@ -1655,8 +1656,7 @@ regex_color: 0.8 0.4 0.2 1.0
     updateWindowIcon();
   }
   void saveLogFont() {
-    SHSetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu",
-               L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
+    SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
   }
   BOOL loadLogFont() {
     currentFontSize = pointsFromFontHeight(DEFAULT_FONT_HEIGHT);
@@ -1664,8 +1664,7 @@ regex_color: 0.8 0.4 0.2 1.0
     DWORD cbValue = sizeof(lf);
     LSTATUS error;
     error =
-        SHGetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu",
-                   L"LogFont", NULL, &lf, &cbValue);
+        SHGetValue(HKEY_CURRENT_USER, APP_KEY, L"LogFont", NULL, &lf, &cbValue);
     if (!error) {
       LogFont = lf;
       currentFontSize = pointsFromFontHeight(LogFont.lfHeight);
@@ -1691,7 +1690,7 @@ regex_color: 0.8 0.4 0.2 1.0
     float fontSize = pointsFromFontHeight(g_editor.LogFont.lfHeight);
     updateFont(fontSize);
     InvalidateRect(hwnd, NULL, TRUE);
-    RegDeleteKeyW(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu");
+    RegDeleteKeyW(HKEY_CURRENT_USER, APP_KEY);
   }
   void updateFont(float size) {
     size = std::round(size);
@@ -5845,7 +5844,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       return 1;
     case WM_CREATE:
       g_editor.initGraphics(hwnd);
-      DragAcceptFiles(hwnd, TRUE);
       SetTimer(hwnd, 2, 2000, NULL);
       break;
     case WM_SETTINGCHANGE: {
@@ -5867,11 +5865,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_WINDOWPOSCHANGED:
       return DefWindowProc(hwnd, msg, wParam, lParam);
     case WM_SIZE: {
+      if (!hwnd) break;
       RECT rc;
       GetClientRect(hwnd, &rc);
       int w = rc.right - rc.left;
       int h = rc.bottom - rc.top;
       if (w > 0 && h > 0) g_editor.resizeSwapChain(w, h);
+      GetWindowRect(hwnd, &rc);
+      INT WindowCX = rc.right - rc.left;
+      INT WindowCY = rc.bottom - rc.top;
+      SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowCX", REG_DWORD, &WindowCX, sizeof(WindowCX));
+      SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowCY", REG_DWORD, &WindowCY, sizeof(WindowCY));
+    } break;
+    case WM_MOVE: {
+      RECT rc;
+      GetWindowRect(hwnd, &rc);
+      INT WindowX = rc.left, WindowY = rc.top;
+      SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowX", REG_DWORD, &WindowX, sizeof(WindowX));
+      SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowY", REG_DWORD, &WindowY, sizeof(WindowY));
     } break;
     case WM_LBUTTONDOWN: {
       int x = (short)LOWORD(lParam);
@@ -6443,7 +6454,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
       }
     }
   }
+
   HACCEL hAccel = LoadAcceleratorsW(hInstance, MAKEINTRESOURCEW(IDR_MAINACCEL));
+
   WNDCLASS wc = {0};
   wc.lpfnWndProc = WndProc;
   wc.hInstance = hInstance;
@@ -6453,11 +6466,26 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   RegisterClass(&wc);
   UINT dpi = GetDpiForSystem();
   if (dpi == 0) dpi = 96;
-  int initialWidth = MulDiv(800, dpi, 96);
-  int initialHeight = MulDiv(640, dpi, 96);
-  HWND hwnd = CreateWindowEx(0, wc.lpszClassName, L"xmiu", WS_OVERLAPPEDWINDOW,
-                             CW_USEDEFAULT, CW_USEDEFAULT, initialWidth,
-                             initialHeight, NULL, NULL, hInstance, NULL);
+
+  INT WindowX = CW_USEDEFAULT, WindowY = CW_USEDEFAULT;
+  INT WindowCX = MulDiv(800, dpi, 96), WindowCY = MulDiv(640, dpi, 96);
+
+  // Load window position from registry
+  DWORD cbValue;
+  LSTATUS error;
+  cbValue = sizeof(WindowX);
+  error = SHGetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowX", NULL, &WindowX, &cbValue);
+  cbValue = sizeof(WindowY);
+  error = SHGetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowY", NULL, &WindowY, &cbValue);
+  cbValue = sizeof(WindowCX);
+  error = SHGetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowCX", NULL, &WindowCX, &cbValue);
+  cbValue = sizeof(WindowCY);
+  error = SHGetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowCY", NULL, &WindowCY, &cbValue);
+
+  DWORD exstyle = WS_EX_ACCEPTFILES;
+  HWND hwnd = CreateWindowEx(exstyle, wc.lpszClassName, L"xmiu", WS_OVERLAPPEDWINDOW,
+                             WindowX, WindowY, WindowCX, WindowCY, NULL, NULL,
+                             hInstance, NULL);
   if (!hwnd) return 0;
   RepositionWindowDx(hwnd);
   ShowWindow(hwnd, nShowCmd);
