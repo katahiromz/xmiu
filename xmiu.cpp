@@ -1697,7 +1697,6 @@ regex_color: 0.8 0.4 0.2 1.0
   void updateTitleBar() {
     if (!hwnd) return;
     std::wstring title;
-    if (isDirty) title = L"*";
     if (currentFilePath.empty()) {
       title += GetResString(IDS_UNTITLED);
     } else {
@@ -1710,6 +1709,7 @@ regex_color: 0.8 0.4 0.2 1.0
     }
     title += L" - ";
     title += GetResString(IDS_APP_TITLE);
+    if (isDirty) title += L" *";
     SetWindowTextW(hwnd, title.c_str());
   }
   void updateWindowIcon() {
