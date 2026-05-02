@@ -108,7 +108,6 @@ STRINGTABLE
 {
     IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "无标题"
-    IDS_HELP_TEXT, "\n\n[快捷键]\nF1                  帮助\nCtrl+N              新建\nCtrl+O / Drag&Drop  打开\nCtrl+S              保存\nCtrl+Shift+S        另存为\nCtrl+F              查找\nCtrl+H              替换\nF3 / Shift+F3       查找下/上一个\nCtrl+G              转到行\nCtrl+B              跳转到匹配的括号\nCtrl+Z/Y            撤销/重做\nCtrl+X/C/V          剪切/复制/粘贴\nCtrl+Shift+K        删除行\nCtrl+U              转大写\nCtrl+Shift+U        转小写\nAlt+Up/Down         移动行\nAlt+Shift+Up/Down   复制行\nCtrl+D              选中词 / 下一个\nCtrl+A              全选\nAlt+Drag            矩形选择\nAlt+Z               自动换行\nCtrl+Wheel/+/-      缩放\nCtrl+0              重置缩放\nF11                 全屏\n"
     IDS_FIND_TITLE, "查找"
     IDS_REPLACE_TITLE, "替换"
     IDS_REPLACE_DONE, "替换完成"

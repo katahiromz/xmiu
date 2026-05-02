@@ -103,71 +103,76 @@ static UINT MapCedEncodingToCodePage(Encoding enc) {
       return CP_ACP;
   }
 }
-inline void RepositionPointDx(LPPOINT ppt, SIZE siz, LPCRECT prc)
-{
-    if (ppt->x + siz.cx > prc->right)
-        ppt->x = prc->right - siz.cx;
-    if (ppt->y + siz.cy > prc->bottom)
-        ppt->y = prc->bottom - siz.cy;
-    if (ppt->x < prc->left)
-        ppt->x = prc->left;
-    if (ppt->y < prc->top)
-        ppt->y = prc->top;
+inline void RepositionPointDx(LPPOINT ppt, SIZE siz, LPCRECT prc) {
+  if (ppt->x + siz.cx > prc->right) ppt->x = prc->right - siz.cx;
+  if (ppt->y + siz.cy > prc->bottom) ppt->y = prc->bottom - siz.cy;
+  if (ppt->x < prc->left) ppt->x = prc->left;
+  if (ppt->y < prc->top) ppt->y = prc->top;
 }
-static void CenterWindowDx(HWND hwnd)
-{
-    BOOL bChild = !!(GetWindowStyle(hwnd) & WS_CHILD);
-
-    HWND hwndParent;
-    if (bChild)
-        hwndParent = ::GetParent(hwnd);
-    else
-        hwndParent = ::GetWindow(hwnd, GW_OWNER);
-
-    RECT rcWorkArea;
-    MONITORINFO mi;
-    mi.cbSize = sizeof(mi);
-    HMONITOR hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-    if (GetMonitorInfo(hMonitor, &mi))
-    {
-        rcWorkArea = mi.rcWork;
-    }
-    else
-    {
-       ::SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
-    }
-
-    RECT rcParent;
-    if (hwndParent)
-        ::GetWindowRect(hwndParent, &rcParent);
-    else
-        rcParent = rcWorkArea;
-
-    SIZE sizParent = { rcParent.right - rcParent.left, rcParent.bottom - rcParent.top };
-
+static RECT GetWorkAreaDx(HWND hwnd) {
+  MONITORINFO mi;
+  mi.cbSize = sizeof(mi);
+  HMONITOR hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+  if (GetMonitorInfo(hMonitor, &mi)) {
+    return mi.rcWork;
+  } else {
     RECT rc;
-    ::GetWindowRect(hwnd, &rc);
-    SIZE siz = { rc.right - rc.left, rc.bottom - rc.top };
+    ::SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
+    return rc;
+  }
+}
+static void CenterWindowDx(HWND hwnd) {
+  BOOL bChild = !!(GetWindowStyle(hwnd) & WS_CHILD);
 
-    POINT pt;
-    pt.x = rcParent.left + (sizParent.cx - siz.cx) / 2;
-    pt.y = rcParent.top + (sizParent.cy - siz.cy) / 2;
+  HWND hwndParent;
+  if (bChild)
+    hwndParent = ::GetParent(hwnd);
+  else
+    hwndParent = ::GetWindow(hwnd, GW_OWNER);
 
-    if (bChild && hwndParent)
-    {
-        ::GetClientRect(hwndParent, &rcParent);
-        ::MapWindowPoints(hwndParent, NULL, (LPPOINT)&rcParent, 2);
-        RepositionPointDx(&pt, siz, &rcParent);
+  RECT rcWorkArea = GetWorkAreaDx(hwnd);
 
-        ::ScreenToClient(hwndParent, &pt);
-    }
-    else
-    {
-        RepositionPointDx(&pt, siz, &rcWorkArea);
-    }
+  RECT rcParent;
+  if (hwndParent)
+    ::GetWindowRect(hwndParent, &rcParent);
+  else
+    rcParent = rcWorkArea;
 
-    ::SetWindowPos(hwnd, NULL, pt.x, pt.y, 0, 0,
-                   SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+  SIZE sizParent = {rcParent.right - rcParent.left,
+                    rcParent.bottom - rcParent.top};
+
+  RECT rc;
+  ::GetWindowRect(hwnd, &rc);
+  SIZE siz = {rc.right - rc.left, rc.bottom - rc.top};
+
+  POINT pt;
+  pt.x = rcParent.left + (sizParent.cx - siz.cx) / 2;
+  pt.y = rcParent.top + (sizParent.cy - siz.cy) / 2;
+
+  if (bChild && hwndParent) {
+    ::GetClientRect(hwndParent, &rcParent);
+    ::MapWindowPoints(hwndParent, NULL, (LPPOINT)&rcParent, 2);
+    RepositionPointDx(&pt, siz, &rcParent);
+
+    ::ScreenToClient(hwndParent, &pt);
+  } else {
+    RepositionPointDx(&pt, siz, &rcWorkArea);
+  }
+
+  ::SetWindowPos(hwnd, NULL, pt.x, pt.y, 0, 0,
+                 SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+}
+static void RepositionWindowDx(HWND hwnd) {
+  RECT rc;
+  ::GetWindowRect(hwnd, &rc);
+
+  SIZE siz = {rc.right - rc.left, rc.bottom - rc.top};
+  POINT pt = {rc.left, rc.top};
+
+  RECT rcWorkArea = GetWorkAreaDx(hwnd);
+  RepositionPointDx(&pt, siz, &rcWorkArea);
+  ::SetWindowPos(hwnd, NULL, pt.x, pt.y, 0, 0,
+                 SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 static DetectResult DetectEncodingEx(const char* buf, size_t len) {
   DetectResult res = {ENC_UTF8_NOBOM, CP_UTF8};
@@ -292,18 +297,15 @@ static std::wstring FindLocalFile(LPCWSTR pszFileName) {
   GetModuleFileNameW(NULL, szPath, _countof(szPath));
   PathRemoveFileSpecW(szPath);
   PathAppend(szPath, pszFileName);
-  if (PathFileExistsW(szPath))
-    return szPath;
+  if (PathFileExistsW(szPath)) return szPath;
   PathRemoveFileSpecW(szPath);
   PathRemoveFileSpecW(szPath);
   PathAppend(szPath, pszFileName);
-  if (PathFileExistsW(szPath))
-    return szPath;
+  if (PathFileExistsW(szPath)) return szPath;
   PathRemoveFileSpecW(szPath);
   PathRemoveFileSpecW(szPath);
   PathAppend(szPath, pszFileName);
-  if (PathFileExistsW(szPath))
-    return szPath;
+  if (PathFileExistsW(szPath)) return szPath;
   return pszFileName;
 }
 static std::string UnescapeString(const std::string& s,
@@ -621,7 +623,8 @@ class CustomTextRenderer : public IDWriteTextRenderer {
   ID2D1DeviceContext* rend;
   ID2D1SolidColorBrush* defaultBrush;
   IDWriteFactory2* dwFactory2;
-  CustomTextRenderer(ID2D1DeviceContext* r, ID2D1SolidColorBrush* b, IDWriteFactory2* f)
+  CustomTextRenderer(ID2D1DeviceContext* r, ID2D1SolidColorBrush* b,
+                     IDWriteFactory2* f)
       : rend(r), defaultBrush(b), dwFactory2(f) {}
   IFACEMETHOD(DrawGlyphRun)(void*, FLOAT baselineOriginX, FLOAT baselineOriginY,
                             DWRITE_MEASURING_MODE measuringMode,
@@ -630,9 +633,10 @@ class CustomTextRenderer : public IDWriteTextRenderer {
                             IUnknown* clientDrawingEffect) override {
     IDWriteColorGlyphRunEnumerator* colorLayers = nullptr;
     HRESULT hr = dwFactory2
-        ? dwFactory2->TranslateColorGlyphRun(baselineOriginX, baselineOriginY,
-              glyphRun, nullptr, measuringMode, nullptr, 0, &colorLayers)
-        : DWRITE_E_NOCOLOR;
+                     ? dwFactory2->TranslateColorGlyphRun(
+                           baselineOriginX, baselineOriginY, glyphRun, nullptr,
+                           measuringMode, nullptr, 0, &colorLayers)
+                     : DWRITE_E_NOCOLOR;
     if (SUCCEEDED(hr) && colorLayers) {
       BOOL hasRun = FALSE;
       while (SUCCEEDED(colorLayers->MoveNext(&hasRun)) && hasRun) {
@@ -644,7 +648,7 @@ class CustomTextRenderer : public IDWriteTextRenderer {
           layerBrush = defaultBrush;
           if (clientDrawingEffect)
             clientDrawingEffect->QueryInterface(__uuidof(ID2D1SolidColorBrush),
-                                               (void**)&layerBrush);
+                                                (void**)&layerBrush);
         } else {
           rend->CreateSolidColorBrush(
               D2D1::ColorF(colorRun->runColor.r, colorRun->runColor.g,
@@ -652,11 +656,13 @@ class CustomTextRenderer : public IDWriteTextRenderer {
               &layerBrush);
         }
         if (layerBrush) {
-          rend->DrawGlyphRun(
-              D2D1::Point2F(colorRun->baselineOriginX, colorRun->baselineOriginY),
-              &colorRun->glyphRun, layerBrush, measuringMode);
-          if (colorRun->paletteIndex != 0xFFFF) layerBrush->Release();
-          else if (clientDrawingEffect && layerBrush != defaultBrush) layerBrush->Release();
+          rend->DrawGlyphRun(D2D1::Point2F(colorRun->baselineOriginX,
+                                           colorRun->baselineOriginY),
+                             &colorRun->glyphRun, layerBrush, measuringMode);
+          if (colorRun->paletteIndex != 0xFFFF)
+            layerBrush->Release();
+          else if (clientDrawingEffect && layerBrush != defaultBrush)
+            layerBrush->Release();
         }
       }
       colorLayers->Release();
@@ -665,7 +671,7 @@ class CustomTextRenderer : public IDWriteTextRenderer {
       ID2D1SolidColorBrush* brush = defaultBrush;
       if (clientDrawingEffect)
         clientDrawingEffect->QueryInterface(__uuidof(ID2D1SolidColorBrush),
-                                           (void**)&brush);
+                                            (void**)&brush);
       rend->DrawGlyphRun(D2D1::Point2F(baselineOriginX, baselineOriginY),
                          glyphRun, brush, measuringMode);
       if (clientDrawingEffect && brush != defaultBrush) brush->Release();
@@ -709,22 +715,20 @@ class CustomTextRenderer : public IDWriteTextRenderer {
     return E_NOINTERFACE;
   }
 };
-static INT_PTR CALLBACK
-AboutDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-  switch (uMsg)
-  {
-  case WM_INITDIALOG:
-    CenterWindowDx(hwnd);
-    return TRUE;
-  case WM_COMMAND:
-    switch (LOWORD(wParam)) {
-      case IDOK:
-      case IDCANCEL:
-        EndDialog(hwnd, LOWORD(wParam));
-        break;
-    }
-    break;
+static INT_PTR CALLBACK AboutDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+                                        LPARAM lParam) {
+  switch (uMsg) {
+    case WM_INITDIALOG:
+      CenterWindowDx(hwnd);
+      return TRUE;
+    case WM_COMMAND:
+      switch (LOWORD(wParam)) {
+        case IDOK:
+        case IDCANCEL:
+          EndDialog(hwnd, LOWORD(wParam));
+          break;
+      }
+      break;
   }
   return 0;
 }
@@ -749,7 +753,6 @@ struct Editor {
   bool searchWholeWord = false;
   bool searchRegex = false;
   bool isReplaceMode = false;
-  bool showHelpPopup = false;
   std::vector<Cursor> cursors;
   EditBatch pendingPadding;
   bool isDragging = false;
@@ -788,7 +791,6 @@ struct Editor {
   IDWriteFactory2* dwFactory2 = nullptr;
   IDWriteTextFormat* textFormat = nullptr;
   IDWriteTextFormat* popupTextFormat = nullptr;
-  IDWriteTextFormat* helpTextFormat = nullptr;
   ID2D1StrokeStyle* dotStyle = nullptr;
   ID2D1StrokeStyle* roundJoinStyle = nullptr;
   D2D1::ColorF background = D2D1::ColorF(1.0f, 1.0f, 1.0f, 1.0f);
@@ -802,7 +804,6 @@ struct Editor {
   float charWidth = 8.0f;
   bool isFullScreen = false;
   WINDOWPLACEMENT prevPlacement = {sizeof(WINDOWPLACEMENT)};
-  std::wstring helpTextStr;
   D2D1::ColorF autoHlColor = D2D1::ColorF(0.8f, 0.8f, 0.8f, 0.35f);
   D2D1::ColorF caretColor = D2D1::ColorF(0.0f, 0.0f, 0.0f, 1.0f);
   bool isDarkMode = false;
@@ -1523,10 +1524,9 @@ regex_color: 0.8 0.4 0.2 1.0
     return {"", true};
   }
   static INT getMenuHeight(HWND hwnd) {
-    RECT rcMenu = { 0 };
+    RECT rcMenu = {0};
     HMENU hMenu = GetMenu(hwnd);
-    if (hMenu)
-      GetMenuItemRect(hwnd, hMenu, 0, &rcMenu);
+    if (hMenu) GetMenuItemRect(hwnd, hMenu, 0, &rcMenu);
     return rcMenu.bottom - rcMenu.top;
   }
   static void getClientRect(HWND hwnd, LPRECT prc) {
@@ -1602,14 +1602,6 @@ regex_color: 0.8 0.4 0.2 1.0
     if (popupTextFormat) {
       popupTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
       popupTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-    }
-    helpTextStr = APP_VERSION + GetResString(IDS_HELP_TEXT);
-    dwFactory->CreateTextFormat(
-        L"Consolas", NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-        DWRITE_FONT_STRETCH_NORMAL, 16.0f, L"en-us", &helpTextFormat);
-    if (helpTextFormat) {
-      helpTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-      helpTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
     }
     float dashes[] = {2.0f, 2.0f};
     D2D1_STROKE_STYLE_PROPERTIES props = D2D1::StrokeStyleProperties(
@@ -1692,11 +1684,13 @@ regex_color: 0.8 0.4 0.2 1.0
     if (swapChain) swapChain->Release();
     if (rend) rend->Release();
     if (popupTextFormat) popupTextFormat->Release();
-    if (helpTextFormat) helpTextFormat->Release();
     if (dotStyle) dotStyle->Release();
     if (roundJoinStyle) roundJoinStyle->Release();
     if (textFormat) textFormat->Release();
-    if (dwFactory2) { dwFactory2->Release(); dwFactory2 = nullptr; }
+    if (dwFactory2) {
+      dwFactory2->Release();
+      dwFactory2 = nullptr;
+    }
     if (dwFactory) dwFactory->Release();
     if (d2dFactory) d2dFactory->Release();
   }
@@ -2999,15 +2993,14 @@ regex_color: 0.8 0.4 0.2 1.0
         switch (LOWORD(wParam)) {
           case IDC_FIND_CASE:
           case IDC_FIND_WORD:
-          case IDC_FIND_REGEX:
-            {
-              bool bCase = IsDlgButtonChecked(hDlg, IDC_FIND_CASE) == BST_CHECKED;
-              bool bWord = IsDlgButtonChecked(hDlg, IDC_FIND_WORD) == BST_CHECKED;
-              bool bRegex = IsDlgButtonChecked(hDlg, IDC_FIND_REGEX) == BST_CHECKED;
-              pThis->updateSearchFlags(bCase, bWord, bRegex);
-              InvalidateRect(pThis->hwnd, NULL, FALSE);
-            }
-            break;
+          case IDC_FIND_REGEX: {
+            bool bCase = IsDlgButtonChecked(hDlg, IDC_FIND_CASE) == BST_CHECKED;
+            bool bWord = IsDlgButtonChecked(hDlg, IDC_FIND_WORD) == BST_CHECKED;
+            bool bRegex =
+                IsDlgButtonChecked(hDlg, IDC_FIND_REGEX) == BST_CHECKED;
+            pThis->updateSearchFlags(bCase, bWord, bRegex);
+            InvalidateRect(pThis->hwnd, NULL, FALSE);
+          } break;
           case IDC_FIND_EDIT:
             if (HIWORD(wParam) == EN_CHANGE) {
               wchar_t wbuf[1024];
@@ -3888,7 +3881,8 @@ regex_color: 0.8 0.4 0.2 1.0
         numLayout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
         float xPos = -(charWidth * 0.5f);
         rend->DrawTextLayout(D2D1::Point2F(xPos, yPos), numLayout,
-                             gutterTextBrush, D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+                             gutterTextBrush,
+                             D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
         numLayout->Release();
       }
     }
@@ -3978,32 +3972,6 @@ regex_color: 0.8 0.4 0.2 1.0
       if (popupTextFormat)
         rend->DrawText(zoomPopupText.c_str(), (UINT32)zoomPopupText.size(),
                        popupTextFormat, popupRect, popupText);
-      popupBg->Release();
-      popupText->Release();
-    }
-    if (showHelpPopup) {
-      float helpW = 500.0f;
-      float helpH = 588.0f;
-      D2D1_RECT_F helpRect =
-          D2D1::RectF((clientW - helpW) / 2, (clientH - helpH) / 2,
-                      (clientW + helpW) / 2, (clientH + helpH) / 2);
-      ID2D1SolidColorBrush* popupBg = nullptr;
-      rend->CreateSolidColorBrush(D2D1::ColorF(0.2f, 0.2f, 0.2f, 0.7f),
-                                  &popupBg);
-      ID2D1SolidColorBrush* popupText = nullptr;
-      rend->CreateSolidColorBrush(D2D1::ColorF(1.0f, 1.0f, 1.0f, 1.0f),
-                                  &popupText);
-      rend->FillRoundedRectangle(D2D1::RoundedRect(helpRect, 10.0f, 10.0f),
-                                 popupBg);
-      IDWriteTextLayout* helpLayout = nullptr;
-      if (SUCCEEDED(dwFactory->CreateTextLayout(
-              helpTextStr.c_str(), (UINT32)helpTextStr.size(), helpTextFormat,
-              helpW - 40, helpH - 20, &helpLayout))) {
-        rend->DrawTextLayout(
-            D2D1::Point2F(helpRect.left + 20, helpRect.top + 10), helpLayout,
-            popupText);
-        helpLayout->Release();
-      }
       popupBg->Release();
       popupText->Release();
     }
@@ -5238,30 +5206,25 @@ regex_color: 0.8 0.4 0.2 1.0
   void moveCursor(UINT vk, bool shift, bool ctrl) {
     bool alt = false;
     if (alt && shift &&
-        (vk == VK_LEFT || vk == VK_RIGHT || vk == VK_UP ||
-         vk == VK_DOWN)) {
+        (vk == VK_LEFT || vk == VK_RIGHT || vk == VK_UP || vk == VK_DOWN)) {
       if (!isRectSelecting) {
         isRectSelecting = true;
-        size_t p =
-            cursors.empty() ? 0 : cursors.back().head;
+        size_t p = cursors.empty() ? 0 : cursors.back().head;
         rectAnchorX = rectHeadX = getXFromPos(p);
-        rectAnchorLine = rectHeadLine =
-            getLineIdx(p);
+        rectAnchorLine = rectHeadLine = getLineIdx(p);
       }
       if (vk == VK_LEFT || vk == VK_RIGHT) {
         int lineIdx = rectHeadLine;
         if (lineIdx < 0) lineIdx = 0;
         if (lineIdx >= (int)lineStarts.size())
           lineIdx = (int)lineStarts.size() - 1;
-        size_t pos =
-            getPosFromLineAndX(lineIdx, rectHeadX);
+        size_t pos = getPosFromLineAndX(lineIdx, rectHeadX);
         float textEndX = getXFromPos(pos);
         bool inVirtualSpace = (rectHeadX > textEndX + 1.0f);
         if (inVirtualSpace) {
           if (vk == VK_LEFT) {
             rectHeadX -= charWidth;
-            if (rectHeadX < textEndX)
-              rectHeadX = textEndX;
+            if (rectHeadX < textEndX) rectHeadX = textEndX;
           } else
             rectHeadX += charWidth;
         } else {
@@ -5274,8 +5237,7 @@ regex_color: 0.8 0.4 0.2 1.0
         if (rectHeadLine > 0) rectHeadLine--;
       }
       if (vk == VK_DOWN) {
-        if (rectHeadLine + 1 < (int)lineStarts.size())
-          rectHeadLine++;
+        if (rectHeadLine + 1 < (int)lineStarts.size()) rectHeadLine++;
       }
       updateRectSelection();
       InvalidateRect(hwnd, NULL, FALSE);
@@ -5341,25 +5303,20 @@ regex_color: 0.8 0.4 0.2 1.0
       } else if (vk == VK_PRIOR) {
         RECT r;
         GetClientRect(hwnd, &r);
-        int p =
-            (int)((r.bottom / dpiScaleY) / lineHeight);
+        int p = (int)((r.bottom / dpiScaleY) / lineHeight);
         int l = getLineIdx(c.head);
-        c.head =
-            getPosFromLineAndX(std::max(0, l - p), c.desiredX);
+        c.head = getPosFromLineAndX(std::max(0, l - p), c.desiredX);
         if (!shift) c.anchor = c.head;
       } else if (vk == VK_NEXT) {
         RECT r;
         GetClientRect(hwnd, &r);
-        int p =
-            (int)((r.bottom / dpiScaleY) / lineHeight);
+        int p = (int)((r.bottom / dpiScaleY) / lineHeight);
         int l = getLineIdx(c.head);
-        c.head = getPosFromLineAndX(
-            std::min((int)lineStarts.size() - 1, l + p),
-            c.desiredX);
+        c.head = getPosFromLineAndX(std::min((int)lineStarts.size() - 1, l + p),
+                                    c.desiredX);
         if (!shift) c.anchor = c.head;
       }
-      if (vk == VK_LEFT || vk == VK_RIGHT || vk == VK_HOME ||
-          vk == VK_END)
+      if (vk == VK_LEFT || vk == VK_RIGHT || vk == VK_HOME || vk == VK_END)
         c.desiredX = getXFromPos(c.head);
     }
     mergeCursors();
@@ -5386,10 +5343,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         g_editor.checkFileModification();
       }
     case WM_COMMAND:
-      //if (g_editor.showHelpPopup && LOWORD(wParam) != ID_HELP) {
-      //  g_editor.showHelpPopup = false;
-      //  InvalidateRect(hwnd, NULL, FALSE);
-      //}
       switch (LOWORD(wParam)) {
         case ID_NEW:
           g_editor.newFile();
@@ -5397,7 +5350,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_OPEN:
           g_editor.openFile();
           break;
-          case 'S':
+        case 'S':
         case ID_SAVE:
           if (g_editor.currentFilePath.empty())
             g_editor.saveFileAs();
@@ -5407,10 +5360,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_SAVE_AS:
           g_editor.saveFileAs();
           break;
-        //case ID_HELP:
-        //  g_editor.showHelpPopup = !g_editor.showHelpPopup;
-        //  InvalidateRect(hwnd, NULL, FALSE);
-        //  break;
         case ID_TOGGLE_FULLSCREEN:
           g_editor.toggleFullScreen();
           break;
@@ -5456,48 +5405,42 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_LOWERCASE:
           g_editor.convertCase(false);
           break;
-        case ID_ZOOM_IN:
-          {
-            g_editor.updateFont(g_editor.currentFontSize * 1.1f);
-            g_editor.rebuildLineStarts();
-            g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
-            std::wstringstream ss;
-            ss << (int)g_editor.currentFontSize << L"px";
-            g_editor.zoomPopupText = ss.str();
-            SetTimer(hwnd, 1, 1000, NULL);
-            InvalidateRect(hwnd, NULL, FALSE);
-          }
-          break;
-        case ID_ZOOM_OUT:
-          {
-            g_editor.updateFont(g_editor.currentFontSize * 0.9f);
-            g_editor.rebuildLineStarts();
-            g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
-            std::wstringstream ss;
-            ss << (int)g_editor.currentFontSize << L"px";
-            g_editor.zoomPopupText = ss.str();
-            SetTimer(hwnd, 1, 1000, NULL);
-            InvalidateRect(hwnd, NULL, FALSE);
-          }
-          break;
+        case ID_ZOOM_IN: {
+          g_editor.updateFont(g_editor.currentFontSize * 1.1f);
+          g_editor.rebuildLineStarts();
+          g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+          std::wstringstream ss;
+          ss << (int)g_editor.currentFontSize << L"px";
+          g_editor.zoomPopupText = ss.str();
+          SetTimer(hwnd, 1, 1000, NULL);
+          InvalidateRect(hwnd, NULL, FALSE);
+        } break;
+        case ID_ZOOM_OUT: {
+          g_editor.updateFont(g_editor.currentFontSize * 0.9f);
+          g_editor.rebuildLineStarts();
+          g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+          std::wstringstream ss;
+          ss << (int)g_editor.currentFontSize << L"px";
+          g_editor.zoomPopupText = ss.str();
+          SetTimer(hwnd, 1, 1000, NULL);
+          InvalidateRect(hwnd, NULL, FALSE);
+        } break;
         case ID_SELECT_ALL:
           g_editor.rollbackPadding();
           g_editor.cursors.clear();
           g_editor.cursors.push_back({g_editor.pt.length(), 0, 0.0f});
           InvalidateRect(hwnd, NULL, FALSE);
           break;
-        case ID_ZOOM_100:
-          {
-            g_editor.updateFont(21.0f);
-            g_editor.rebuildLineStarts();
-            g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
-            std::wstringstream ss;
-            ss << (int)g_editor.currentFontSize << L"px";
-            g_editor.zoomPopupText = ss.str();
-            SetTimer(hwnd, 1, 1000, NULL);
-            InvalidateRect(hwnd, NULL, FALSE);
-          }
-          break;
+        case ID_ZOOM_100: {
+          g_editor.updateFont(21.0f);
+          g_editor.rebuildLineStarts();
+          g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+          std::wstringstream ss;
+          ss << (int)g_editor.currentFontSize << L"px";
+          g_editor.zoomPopupText = ss.str();
+          SetTimer(hwnd, 1, 1000, NULL);
+          InvalidateRect(hwnd, NULL, FALSE);
+        } break;
         case ID_INSERT_MODE:
           g_editor.isOverwriteMode = !g_editor.isOverwriteMode;
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5651,15 +5594,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_EXIT:
           PostMessageW(hwnd, WM_CLOSE, 0, 0);
           break;
-        case ID_OPEN_README:
-          {
-            std::wstring strReadMe = GetResString(IDS_README);
-            std::wstring strPath = FindLocalFile(strReadMe.c_str());
-            ShellExecuteW(hwnd, NULL, L"notepad.exe", strPath.c_str(), NULL, SW_SHOWNORMAL);
-          }
-          break;
+        case ID_OPEN_README: {
+          std::wstring strReadMe = GetResString(IDS_README);
+          std::wstring strPath = FindLocalFile(strReadMe.c_str());
+          ShellExecuteW(hwnd, NULL, L"notepad.exe", strPath.c_str(), NULL,
+                        SW_SHOWNORMAL);
+        } break;
         case ID_ABOUT:
-          DialogBox(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDD_ABOUT), hwnd, AboutDialogProc);
+          DialogBox(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDD_ABOUT), hwnd,
+                    AboutDialogProc);
           break;
       }
       break;
@@ -5722,10 +5665,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       if (w > 0 && h > 0) g_editor.resizeSwapChain(w, h);
     } break;
     case WM_LBUTTONDOWN: {
-      //if (g_editor.showHelpPopup) {
-      //  g_editor.showHelpPopup = false;
-      //  InvalidateRect(hwnd, NULL, FALSE);
-      //}
       int x = (short)LOWORD(lParam);
       int y = (short)HIWORD(lParam);
       RECT rc;
@@ -6168,10 +6107,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       break;
     case WM_CHAR: {
-      //if (g_editor.showHelpPopup) {
-      //  g_editor.showHelpPopup = false;
-      //  InvalidateRect(hwnd, NULL, FALSE);
-      //}
       wchar_t c = (wchar_t)wParam;
       if (c < 32 && c != 8 && c != 13) break;
       if (c == 8) {
@@ -6251,11 +6186,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       if (g_editor.checkUnsavedChanges()) {
         HDROP hDrop = (HDROP)wParam;
         WCHAR file[MAX_PATH];
-        if (DragQueryFileW(hDrop, 0, file, MAX_PATH) &&
-            g_editor.openFileFromPath(file) && g_editor.showHelpPopup) {
-          //g_editor.showHelpPopup = false;
-          //InvalidateRect(hwnd, NULL, FALSE);
-        }
+        if (DragQueryFileW(hDrop, 0, file, _countof(file)) &&
+            g_editor.openFileFromPath(file))
+          InvalidateRect(hwnd, NULL, FALSE);
         DragFinish(hDrop);
       }
     } break;
@@ -6326,30 +6259,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   if (dpi == 0) dpi = 96;
   int initialWidth = MulDiv(800, dpi, 96);
   int initialHeight = MulDiv(640, dpi, 96);
-  HWND hwnd =
-      CreateWindowEx(0, wc.lpszClassName, L"xmiu",
-                     WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-                     initialWidth, initialHeight, NULL, NULL, hInstance, NULL);
+  HWND hwnd = CreateWindowEx(0, wc.lpszClassName, L"xmiu", WS_OVERLAPPEDWINDOW,
+                             CW_USEDEFAULT, CW_USEDEFAULT, initialWidth,
+                             initialHeight, NULL, NULL, hInstance, NULL);
   if (!hwnd) return 0;
+  RepositionWindowDx(hwnd);
   ShowWindow(hwnd, nShowCmd);
   if (!fileToOpen.empty()) {
     g_editor.openFileFromPath(fileToOpen);
-  } else {
-    //g_editor.showHelpPopup = true;
-    //InvalidateRect(hwnd, NULL, FALSE);
   }
   LocalFree(argv);
   g_editor.updateTitleBar();
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
-    //if (g_editor.showHelpPopup) {
-    //  switch (msg.message) {
-    //    case WM_CHAR: case WM_LBUTTONDOWN:
-    //      g_editor.showHelpPopup = false;
-    //      InvalidateRect(hwnd, NULL, FALSE);
-    //      break;
-    //  }
-    //}
     if (!g_editor.hFindDlg || !IsDialogMessage(g_editor.hFindDlg, &msg)) {
       if (!hAccel || !TranslateAcceleratorW(hwnd, hAccel, &msg)) {
         TranslateMessage(&msg);

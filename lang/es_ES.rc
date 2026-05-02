@@ -108,7 +108,6 @@ STRINGTABLE
 {
     IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Sin título"
-    IDS_HELP_TEXT, "\n\n[Atajos]\nF1                  Ayuda\nCtrl+N              Nuevo\nCtrl+O / Drag&Drop  Abrir\nCtrl+S              Guardar\nCtrl+Shift+S        Guardar como\nCtrl+F              Buscar\nCtrl+H              Reemplazar\nF3 / Shift+F3       Buscar sig./ant.\nCtrl+G              Ir a la línea\nCtrl+B              Ir al paréntesis correspondiente\nCtrl+Z/Y            Deshacer/Rehacer\nCtrl+X/C/V          Cortar/Copiar/Pegar\nCtrl+Shift+K        Eliminar línea\nCtrl+U              Mayúsculas\nCtrl+Shift+U        Minúsculas\nAlt+Up/Down         Mover línea\nAlt+Shift+Up/Down   Copiar línea\nCtrl+D              Sel. palabra / Sig.\nCtrl+A              Seleccionar todo\nAlt+Drag            Selección rect.\nAlt+Z               Ajuste de línea\nCtrl+Wheel/+/-      Zoom\nCtrl+0              Restablecer zoom\nF11                 Pantalla completa\n"
     IDS_FIND_TITLE, "Buscar"
     IDS_REPLACE_TITLE, "Reemplazar"
     IDS_REPLACE_DONE, "Reemplazo completado"

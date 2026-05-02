@@ -108,7 +108,6 @@ STRINGTABLE
 {
     IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "無題"
-    IDS_HELP_TEXT, "\n\n[ショートカット]\nF1                  ヘルプ\nCtrl+N              新規作成\nCtrl+O / Drag&Drop  開く\nCtrl+S              保存\nCtrl+Shift+S        名前を付けて保存\nCtrl+F              検索\nCtrl+H              置換\nF3 / Shift+F3       次/前を検索\nCtrl+G              指定行へ移動\nCtrl+B              対応するカッコにジャンプ\nCtrl+Z/Y            元に戻す/やり直し\nCtrl+X/C/V          切り取り/コピー/貼り付け\nCtrl+Shift+K        行削除\nCtrl+U              大文字へ変換\nCtrl+Shift+U        小文字へ変換\nAlt+Up/Down         行移動\nAlt+Shift+Up/Down   行コピー\nCtrl+D              単語選択 / 次を選択\nCtrl+A              すべて選択\nAlt+Drag            矩形選択\nAlt+Z               折り返し\nCtrl+Wheel/+/-      ズーム\nCtrl+0              ズームリセット\nF11                 全画面表示\n"
     IDS_FIND_TITLE, "検索"
     IDS_REPLACE_TITLE, "置換"
     IDS_REPLACE_DONE, "置換完了"

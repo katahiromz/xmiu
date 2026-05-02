@@ -108,7 +108,6 @@ STRINGTABLE
 {
     IDS_APP_TITLE, "xmiu"
     IDS_UNTITLED, "Bez tytułu"
-    IDS_HELP_TEXT, "\n\n[Skróty klawiszowe]\nF1                  Pomoc\nCtrl+N              Nowy\nCtrl+O / Drag&Drop  Otwórz\nCtrl+S              Zapisz\nCtrl+Shift+S        Zapisz jako\nCtrl+F              Znajdź\nCtrl+H              Zamień\nF3 / Shift+F3       Znajdź następny/poprzedni\nCtrl+G              Przejdź do linii\nCtrl+B              Przejdź do pasującego nawiasu\nCtrl+Z/Y            Cofnij/Ponów\nCtrl+X/C/V          Wytnij/Kopiuj/Wklej\nCtrl+Shift+K        Usuń linię\nCtrl+U              Wielkie litery\nCtrl+Shift+U        Małe litery\nAlt+Góra/Dół        Przenieś linię\nAlt+Shift+Góra/Dół  Kopiuj linię\nCtrl+D              Zaznacz słowo / Następne\nCtrl+A              Zaznacz wszystko\nAlt+Drag            Zaznaczanie prostokątne\nAlt+Z               Zawijanie wierszy\nCtrl+Kółko/+/-      Powiększenie\nCtrl+0              Resetuj powiększenie\nF11                 Pełny ekran\n"
     IDS_FIND_TITLE, "Znajdź"
     IDS_REPLACE_TITLE, "Zamień"
     IDS_REPLACE_DONE, "Zakończono zamienianie"
