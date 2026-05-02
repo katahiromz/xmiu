@@ -6,7 +6,7 @@ xmiu（ペケミウ）は、Windows用のテキストエディタです。
 
 【対応環境】
 
-- Windows 10 / Windows 11
+- Windows 11 / Windows 10
 
 【ショートカット】
 
