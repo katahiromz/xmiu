@@ -5669,9 +5669,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_DUPLICATE_LINES_DOWN:
           g_editor.duplicateLines(false);
           break;
-        case ID_FORCE_INDENT:
-          g_editor.indentLines(true);
-          break;
         case ID_JUMP_TO_MATCHING_BRACKET:
           g_editor.jumpToMatchingBracket();
           break;

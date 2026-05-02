@@ -83,7 +83,6 @@
 #define ID_MOVE_LINES_DOWN                  10046
 #define ID_DUPLICATE_LINES_UP               10047
 #define ID_DUPLICATE_LINES_DOWN             10048
-#define ID_FORCE_INDENT                     10049
 #define ID_JUMP_TO_MATCHING_BRACKET         10050
 #define ID_MOVE_LEFT                        10052
 #define ID_MOVE_SHIFT_LEFT                  10053
