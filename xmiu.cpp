@@ -1781,9 +1781,14 @@ regex_color: 0.8 0.4 0.2 1.0
       }
       title += fileName;
     }
+    if (isDirty) title += L" * ";
     title += L" - ";
     title += GetResString(IDS_APP_TITLE);
-    if (isDirty) title += L" *";
+#ifdef _WIN64
+    title += L" (x64)";
+#else
+    title += L" (x86)";
+#endif
     SetWindowTextW(hwnd, title.c_str());
   }
   void updateWindowIcon() {
