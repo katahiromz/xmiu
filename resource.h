@@ -19,6 +19,7 @@
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
 #define IDD_ABOUT                           104
+#define IDD_CONFIG                          105
 
 #define IDI_ICON1                           101
 
@@ -117,12 +118,13 @@
 #define ID_MOVE_CONTROL_SHIFT_NEXT          10083
 #define ID_OPEN_README                      10084
 #define ID_ABOUT                            10085
+#define ID_CONFIG                           10086
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    102
-        #define _APS_NEXT_COMMAND_VALUE     10085
+        #define _APS_NEXT_COMMAND_VALUE     10087
         #define _APS_NEXT_CONTROL_VALUE     1013
         #define _APS_NEXT_SYMED_VALUE       300
     #endif

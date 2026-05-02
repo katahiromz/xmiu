@@ -18,6 +18,8 @@ IDR_MAINMENU MENU
         MENUITEM "上書き保存(&S)\tCtrl+S", ID_SAVE
         MENUITEM "名前を付けて保存(&A)...\tCtrl+Shift+S", ID_SAVE_AS
         MENUITEM SEPARATOR
+        MENUITEM "設定(&C)...\tAlt+Enter", ID_CONFIG
+        MENUITEM SEPARATOR
         MENUITEM "終了(&X)\tAlt+F4", ID_EXIT
     }
     POPUP "編集(&E)"
@@ -99,6 +101,21 @@ FONT 9, "Segoe UI", 400, 0, 1
     EDITTEXT IDC_GOTO_EDIT, 10, 22, 160, 14, ES_NUMBER | ES_AUTOHSCROLL
     DEFPUSHBUTTON "Aceptar", IDOK, 65, 40, 50, 14
     PUSHBUTTON "Cancelar", IDCANCEL, 120, 40, 50, 14
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// RT_DIALOG
+
+IDD_CONFIG DIALOG 0, 0, 224, 135
+CAPTION "xmiu の設定"
+STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_CAPTION
+FONT 9, "MS UI Gothic"
+{
+    DEFPUSHBUTTON "OK", IDOK, 95, 115, 60, 15
+    PUSHBUTTON "キャンセル", IDCANCEL, 160, 115, 60, 15
+    RTEXT "フォント(&F):", -1, 5, 10, 55, 10
+    EDITTEXT edt1, 70, 5, 95, 15, ES_READONLY
+    PUSHBUTTON "変更(&C)...", -1, 170, 5, 45, 15
 }
 
 //////////////////////////////////////////////////////////////////////////////

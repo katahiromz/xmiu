@@ -47,6 +47,18 @@ struct DetectResult {
   MiuEncoding type;
   UINT codePage;
 };
+static float pointsFromFontHeight(LONG lfHeight) {
+  HDC hDC = GetDC(NULL);
+  float points = (float)MulDiv(labs(lfHeight), 96, GetDeviceCaps(hDC, LOGPIXELSY));
+  ReleaseDC(NULL, hDC);
+  return points;
+}
+static LONG fontHeightFromPoints(float points) {
+  HDC hDC = GetDC(NULL);
+  LONG lfHeight = -MulDiv((INT)std::round(points), GetDeviceCaps(hDC, LOGPIXELSY), 96);
+  ReleaseDC(NULL, hDC);
+  return lfHeight;
+}
 static void SwapBytes(wchar_t* buf, size_t count) {
   for (size_t i = 0; i < count; ++i) {
     unsigned short x = (unsigned short)buf[i];
@@ -827,6 +839,11 @@ struct Editor {
   std::vector<ID2D1SolidColorBrush*> regexBrushes;
   FILETIME lastWriteTime = {0, 0};
   bool isCheckingModification = false;
+  LOGFONTW LogFont = { 
+	-14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+	DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+	DEFAULT_QUALITY, FIXED_PITCH | FF_DONTCARE, L"ＭＳ ゴシック"
+  };
   void updateFileTime() {
     if (currentFilePath.empty()) {
       lastWriteTime = {0, 0};
@@ -1537,6 +1554,7 @@ regex_color: 0.8 0.4 0.2 1.0
   }
   void initGraphics(HWND h) {
     hwnd = h;
+    loadLogFont();
     RECT rc;
     GetClientRect(hwnd, &rc);
     UINT width = rc.right - rc.left;
@@ -1623,18 +1641,36 @@ regex_color: 0.8 0.4 0.2 1.0
     updateTitleBar();
     updateWindowIcon();
   }
+  void saveLogFont() {
+    SHSetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu", L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
+  }
+  BOOL loadLogFont() {
+    LOGFONTW lf;
+    DWORD cbValue = sizeof(lf);
+    LSTATUS error;
+    error = SHGetValue(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu", L"LogFont", NULL, &lf, &cbValue);
+    if (!error) {
+      LogFont = lf;
+      currentFontSize = pointsFromFontHeight(LogFont.lfHeight);
+      return TRUE;
+    }
+    return FALSE;
+  }
   void updateFont(float size) {
     size = std::round(size);
     if (size < 6.0f) size = 6.0f;
     if (size > 200.0f) size = 200.0f;
-    if (textFormat && size == currentFontSize) return;
     currentFontSize = size;
     if (textFormat) {
       textFormat->Release();
       textFormat = nullptr;
     }
+    LogFont.lfHeight = fontHeightFromPoints(size);
+    DWRITE_FONT_STYLE fontStyle = DWRITE_FONT_STYLE_NORMAL;
+    if (LogFont.lfItalic)
+      fontStyle = DWRITE_FONT_STYLE_ITALIC;
     dwFactory->CreateTextFormat(
-        L"Consolas", NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
+        LogFont.lfFaceName, NULL, (DWRITE_FONT_WEIGHT)LogFont.lfWeight, fontStyle,
         DWRITE_FONT_STRETCH_NORMAL, currentFontSize, L"en-us", &textFormat);
     lineHeight = currentFontSize * 1.25f;
     if (textFormat) {
@@ -1654,6 +1690,7 @@ regex_color: 0.8 0.4 0.2 1.0
     if (textFormat) textFormat->SetIncrementalTabStop(charWidth * 4.0f);
     updateGutterWidth();
     updateScrollBars();
+    saveLogFont();
   }
   void destroyGraphics() {
     if (keywordBrush) {
@@ -5325,6 +5362,57 @@ regex_color: 0.8 0.4 0.2 1.0
     ensureCaretVisible();
     InvalidateRect(hwnd, NULL, FALSE);
   }
+  static INT_PTR CALLBACK ConfigDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
+                                           LPARAM lParam)
+  {
+    Editor *pEditor = (Editor *)GetWindowLongPtr(hwnd, DWLP_USER);
+    static LOGFONT s_lf;
+    WCHAR text[MAX_PATH];
+    switch (uMsg) {
+    case WM_INITDIALOG:
+      {
+        pEditor = (Editor*)lParam;
+        s_lf = pEditor->LogFont;
+        SetWindowLongPtr(hwnd, DWLP_USER, lParam);
+        float fontSize = pointsFromFontHeight(s_lf.lfHeight);
+        swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
+        SetDlgItemTextW(hwnd, edt1, text);
+      }
+      return TRUE;
+    case WM_COMMAND:
+      switch (LOWORD(wParam)) {
+      case psh1:
+      {
+        LOGFONT lf = s_lf;
+        CHOOSEFONT cf = { sizeof(cf) };
+        cf.hwndOwner = hwnd;
+        cf.lpLogFont = &lf;
+        cf.Flags = CF_INITTOLOGFONTSTRUCT | CF_NOSCRIPTSEL | CF_NOVERTFONTS;
+        if (ChooseFont(&cf)) {
+          float fontSize = pointsFromFontHeight(s_lf.lfHeight);
+          swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
+          SetDlgItemTextW(hwnd, edt1, text);
+          s_lf = lf;
+        }
+        break;
+      }
+      case IDOK:
+      {
+        pEditor->LogFont = s_lf;
+        EndDialog(hwnd, IDOK);
+        float fontSize = pointsFromFontHeight(s_lf.lfHeight);
+        pEditor->updateFont(fontSize);
+        InvalidateRect(pEditor->hwnd, NULL, TRUE);
+        break;
+      }
+      case IDCANCEL:
+        EndDialog(hwnd, IDCANCEL);
+        break;
+      }
+      break;
+    }
+    return 0;
+  }
 } g_editor;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -5412,7 +5500,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
           std::wstringstream ss;
-          ss << (int)g_editor.currentFontSize << L"px";
+          ss << (int)g_editor.currentFontSize << L" pt";
           g_editor.zoomPopupText = ss.str();
           SetTimer(hwnd, 1, 1000, NULL);
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5422,7 +5510,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
           std::wstringstream ss;
-          ss << (int)g_editor.currentFontSize << L"px";
+          ss << (int)g_editor.currentFontSize << L" pt";
           g_editor.zoomPopupText = ss.str();
           SetTimer(hwnd, 1, 1000, NULL);
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5438,7 +5526,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
           std::wstringstream ss;
-          ss << (int)g_editor.currentFontSize << L"px";
+          ss << (int)g_editor.currentFontSize << L" pt";
           g_editor.zoomPopupText = ss.str();
           SetTimer(hwnd, 1, 1000, NULL);
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5605,6 +5693,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_ABOUT:
           DialogBox(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDD_ABOUT), hwnd,
                     AboutDialogProc);
+          break;
+        case ID_CONFIG:
+          DialogBoxParam(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDD_CONFIG), hwnd,
+                         Editor::ConfigDialogProc, (LPARAM)&g_editor);
           break;
       }
       break;
@@ -6009,7 +6101,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         g_editor.rebuildLineStarts();
         g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
         std::wstringstream ss;
-        ss << (int)g_editor.currentFontSize << L"px";
+        ss << (int)g_editor.currentFontSize << L" pt";
         g_editor.zoomPopupText = ss.str();
         SetTimer(hwnd, 1, 1000, NULL);
       } else {
@@ -6206,6 +6298,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_DESTROY:
       KillTimer(hwnd, 2);
       KillTimer(hwnd, 3);
+      g_editor.saveLogFont();
       g_editor.destroyGraphics();
       PostQuitMessage(0);
       break;
