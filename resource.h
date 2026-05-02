@@ -48,6 +48,7 @@
 #define IDS_FILE_CHANGED_TITLE              123
 #define IDS_README                          124
 #define IDS_CONFIG                          125
+#define IDS_KILL_CONFIG                     126
 
 #define ID_EXIT                             10001
 #define ID_SAVE_AS                          10002
@@ -120,12 +121,13 @@
 #define ID_OPEN_README                      10084
 #define ID_ABOUT                            10085
 #define ID_CONFIG                           10086
+#define ID_KILL_CONFIG                      10087
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    102
-        #define _APS_NEXT_COMMAND_VALUE     10087
+        #define _APS_NEXT_COMMAND_VALUE     10088
         #define _APS_NEXT_CONTROL_VALUE     1013
         #define _APS_NEXT_SYMED_VALUE       300
     #endif

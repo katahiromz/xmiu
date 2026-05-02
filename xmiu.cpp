@@ -1671,6 +1671,26 @@ regex_color: 0.8 0.4 0.2 1.0
     }
     return FALSE;
   }
+  void killConfig() {
+    g_editor.LogFont = {-14,
+                        0,
+                        0,
+                        0,
+                        FW_NORMAL,
+                        FALSE,
+                        FALSE,
+                        FALSE,
+                        DEFAULT_CHARSET,
+                        OUT_DEFAULT_PRECIS,
+                        CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY,
+                        FIXED_PITCH | FF_DONTCARE,
+                        L"ＭＳ ゴシック"};
+    float fontSize = pointsFromFontHeight(g_editor.LogFont.lfHeight);
+    updateFont(fontSize);
+    InvalidateRect(hwnd, NULL, TRUE);
+    RegDeleteKeyW(HKEY_CURRENT_USER, L"SOFTWARE\\Katayama Hirofumi MZ\\xmiu");
+  }
   void updateFont(float size) {
     size = std::round(size);
     if (size < 6.0f) size = 6.0f;
@@ -5739,6 +5759,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
           PropertySheet(&psh);
         } break;
+        case ID_KILL_CONFIG:
+          if (MessageBoxW(hwnd, GetResString(IDS_KILL_CONFIG).c_str(), GetResString(IDS_APP_TITLE).c_str(),
+                          MB_ICONINFORMATION | MB_YESNOCANCEL) == IDYES)
+          {
+            g_editor.killConfig();
+          }
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -6339,7 +6366,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     case WM_DESTROY:
       KillTimer(hwnd, 2);
       KillTimer(hwnd, 3);
-      g_editor.saveLogFont();
       g_editor.destroyGraphics();
       PostQuitMessage(0);
       break;

@@ -19,6 +19,7 @@ IDR_MAINMENU MENU
         MENUITEM "名前を付けて保存(&A)...\tCtrl+Shift+S", ID_SAVE_AS
         MENUITEM SEPARATOR
         MENUITEM "設定(&C)...\tAlt+Enter", ID_CONFIG
+        MENUITEM "設定の消去(R)...", ID_KILL_CONFIG
         MENUITEM SEPARATOR
         MENUITEM "終了(&X)\tAlt+F4", ID_EXIT
     }
@@ -138,6 +139,8 @@ STRINGTABLE
     IDS_FILE_CHANGED_WARN, "\n(警告: 未保存の変更は破棄されます)"
     IDS_FILE_CHANGED_TITLE, "ファイルの変更検知"
     IDS_README, "README_ja.txt"
+    IDS_CONFIG, "xmiu の設定"
+    IDS_KILL_CONFIG, "設定を消してもよろしいですか？"
 }
 
 //////////////////////////////////////////////////////////////////////////////
