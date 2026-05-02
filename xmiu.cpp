@@ -5769,7 +5769,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_OPEN_README: {
           std::wstring strReadMe = GetResString(IDS_README);
           std::wstring strPath = FindLocalFile(strReadMe.c_str());
-          ShellExecuteW(hwnd, NULL, L"notepad.exe", strPath.c_str(), NULL,
+          std::wstring strQuotedPath = L"\"" + strPath + L"\"";
+          ShellExecuteW(hwnd, NULL, L"notepad.exe", strQuotedPath.c_str(), NULL,
                         SW_SHOWNORMAL);
         } break;
         case ID_ABOUT:
