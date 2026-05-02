@@ -35,7 +35,7 @@ IDR_MAINMENU MENU
         MENUITEM "貼り付け(&P)\tCtrl+V", ID_PASTE
         MENUITEM "削除(&D)\tDel", ID_DELETE
         MENUITEM SEPARATOR
-        MENUITEM "行削除(&L)\tCtrl+Shift+K", ID_DELETE_LINES
+        MENUITEM "行削除(&L)\tCtrl+K", ID_DELETE_LINES
         MENUITEM SEPARATOR
         MENUITEM "すべて選択(&A)\tCtrl+A", ID_SELECT_ALL
     }
