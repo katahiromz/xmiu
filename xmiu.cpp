@@ -5809,7 +5809,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             sei.lpVerb = L"properties";
             sei.lpFile = g_editor.currentFilePath.c_str();
             sei.fMask  = SEE_MASK_INVOKEIDLIST;
+            sei.nShow  = SW_SHOWNORMAL;
             ShellExecuteEx(&sei);
+          }
+          break;
+        case ID_NEW_WINDOW:
+          {
+            WCHAR szPath[MAX_PATH];
+            GetModuleFileNameW(NULL, szPath, _countof(szPath));
+            ShellExecuteW(hwnd, NULL, szPath, NULL, NULL, SW_SHOWNORMAL);
           }
           break;
       }

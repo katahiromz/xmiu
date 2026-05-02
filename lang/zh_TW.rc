@@ -13,6 +13,7 @@ IDR_MAINMENU MENU
     POPUP "ファイル(&F)"
     {
         MENUITEM "新規作成(&N)\tCtrl+N", ID_NEW
+        MENUITEM "新しいウィンドウ(&W)\tCtrl+Shift+N", ID_NEW_WINDOW
         MENUITEM SEPARATOR
         MENUITEM "開く(&O)...\tCtrl+O", ID_OPEN
         MENUITEM "上書き保存(&S)\tCtrl+S", ID_SAVE

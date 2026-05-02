@@ -125,12 +125,13 @@
 #define ID_BACK_CONTROL                     10089
 #define ID_DELETE_CONTROL                   10090
 #define ID_FILE_PROP                        10091
+#define ID_NEW_WINDOW                       10092
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    102
-        #define _APS_NEXT_COMMAND_VALUE     10092
+        #define _APS_NEXT_COMMAND_VALUE     10093
         #define _APS_NEXT_CONTROL_VALUE     1013
         #define _APS_NEXT_SYMED_VALUE       300
     #endif
