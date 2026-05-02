@@ -4191,7 +4191,8 @@ regex_color: 0.8 0.4 0.2 1.0
       }
     }
     batch.afterCursors = cursors;
-    undo.push(batch);
+    if (!batch.ops.empty())
+      undo.push(batch);
     rebuildLineStarts();
     ensureCaretVisible();
     updateDirtyFlag();
@@ -4709,7 +4710,7 @@ regex_color: 0.8 0.4 0.2 1.0
     }
   }
   void deleteLines() {
-    rollbackPadding();
+    commitPadding();
     std::vector<Cursor> originalCursors = cursors;
     std::vector<Cursor> delRanges;
     bool hasSelection = false;
@@ -4800,6 +4801,9 @@ regex_color: 0.8 0.4 0.2 1.0
                   cursors[i].desiredX = getXFromPos(cursors[i].head);
                 }
               }
+              // afterCursors をカーソル調整後の値で上書き
+              if (!undo.undoStack.empty())
+                undo.undoStack.back().afterCursors = cursors;
               ensureCaretVisible();
               updateDirtyFlag();
               InvalidateRect(hwnd, NULL, FALSE);
