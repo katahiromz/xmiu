@@ -5595,6 +5595,38 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.deleteForwardAtCursors();
           InvalidateRect(hwnd, NULL, FALSE);
           break;
+        case ID_BACK:
+          {
+            g_editor.highSurrogate = 0;
+            bool hadSelection = false;
+            for (const auto& cur : g_editor.cursors) {
+              if (cur.hasSelection()) {
+                hadSelection = true;
+                break;
+              }
+            }
+            g_editor.rollbackPadding();
+            g_editor.backspaceAtCursors(!hadSelection);
+            if (hadSelection) {
+              for (auto& cur : g_editor.cursors) cur.anchor = cur.head;
+            }
+            InvalidateRect(hwnd, NULL, FALSE);
+          }
+          break;
+        case ID_BACK_CONTROL:
+          g_editor.rollbackPadding();
+          g_editor.isRectSelecting = false;
+          g_editor.moveCursor(VK_LEFT, true, true);
+          g_editor.deleteForwardAtCursors();
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
+        case ID_DELETE_CONTROL:
+          g_editor.rollbackPadding();
+          g_editor.isRectSelecting = false;
+          g_editor.moveCursor(VK_RIGHT, true, true);
+          g_editor.deleteForwardAtCursors();
+          InvalidateRect(hwnd, NULL, FALSE);
+          break;
         case ID_ESCAPE:
           g_editor.rollbackPadding();
           if (!g_editor.cursors.empty()) {
@@ -6274,20 +6306,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       wchar_t c = (wchar_t)wParam;
       if (c < 32 && c != 8 && c != 13) break;
       if (c == 8) {
-        g_editor.highSurrogate = 0;
-        bool hadSelection = false;
-        for (const auto& cur : g_editor.cursors) {
-          if (cur.hasSelection()) {
-            hadSelection = true;
-            break;
-          }
-        }
-        g_editor.rollbackPadding();
-        g_editor.backspaceAtCursors(!hadSelection);
-        if (hadSelection) {
-          for (auto& cur : g_editor.cursors) cur.anchor = cur.head;
-        }
-        InvalidateRect(hwnd, NULL, FALSE);
+        break;
       } else if (c == 13) {
         g_editor.highSurrogate = 0;
         g_editor.insertNewlineWithAutoIndent();

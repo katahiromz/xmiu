@@ -122,12 +122,15 @@
 #define ID_ABOUT                            10085
 #define ID_CONFIG                           10086
 #define ID_KILL_CONFIG                      10087
+#define ID_BACK                             10088
+#define ID_BACK_CONTROL                     10089
+#define ID_DELETE_CONTROL                   10090
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS
         #define _APS_NO_MFC                 1
         #define _APS_NEXT_RESOURCE_VALUE    102
-        #define _APS_NEXT_COMMAND_VALUE     10088
+        #define _APS_NEXT_COMMAND_VALUE     10091
         #define _APS_NEXT_CONTROL_VALUE     1013
         #define _APS_NEXT_SYMED_VALUE       300
     #endif
