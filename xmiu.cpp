@@ -37,6 +37,7 @@
 #include "compact_enc_det/compact_enc_det.h"
 #include "resource.h"
 const std::wstring APP_VERSION = L"xmiu v1.0.23";
+#define DEFAULT_FONT_HEIGHT (-14)
 enum MiuEncoding {
   ENC_UTF8_NOBOM = 0,
   ENC_UTF8_BOM,
@@ -842,7 +843,7 @@ struct Editor {
   std::vector<ID2D1SolidColorBrush*> regexBrushes;
   FILETIME lastWriteTime = {0, 0};
   bool isCheckingModification = false;
-  LOGFONTW LogFont = {-14,
+  LOGFONTW LogFont = {DEFAULT_FONT_HEIGHT,
                       0,
                       0,
                       0,
@@ -1658,7 +1659,7 @@ regex_color: 0.8 0.4 0.2 1.0
                L"LogFont", REG_BINARY, &LogFont, sizeof(LogFont));
   }
   BOOL loadLogFont() {
-    currentFontSize = pointsFromFontHeight(-14);
+    currentFontSize = pointsFromFontHeight(DEFAULT_FONT_HEIGHT);
     LOGFONTW lf;
     DWORD cbValue = sizeof(lf);
     LSTATUS error;
@@ -1673,7 +1674,7 @@ regex_color: 0.8 0.4 0.2 1.0
     return FALSE;
   }
   void killConfig() {
-    g_editor.LogFont = {-14,
+    g_editor.LogFont = {DEFAULT_FONT_HEIGHT,
                         0,
                         0,
                         0,
