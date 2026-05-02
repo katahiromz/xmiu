@@ -6453,6 +6453,14 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         return 0;
       }
     }
+
+    WCHAR szPath[MAX_PATH];
+    GetModuleFileNameW(NULL, szPath, _countof(szPath));
+    for (INT iarg = 2; iarg < argc; ++iarg) {
+      std::wstring file = argv[iarg];
+      std::wstring quotedFile = L"\"" + file + L"\"";
+      ShellExecuteW(NULL, NULL, szPath, quotedFile.c_str(), NULL, nShowCmd);
+    }
   }
 
   HACCEL hAccel = LoadAcceleratorsW(hInstance, MAKEINTRESOURCEW(IDR_MAINACCEL));
