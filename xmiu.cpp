@@ -2729,6 +2729,7 @@ regex_color: 0.8 0.4 0.2 1.0
       updateTitleBar();
       break;
     }
+    InvalidateRect(hwnd, NULL, FALSE);
   }
   void replaceNext() {
     if (cursors.empty() || searchQuery.empty()) return;
@@ -4829,6 +4830,7 @@ regex_color: 0.8 0.4 0.2 1.0
     rebuildLineStarts();
     ensureCaretVisible();
     updateDirtyFlag();
+    if (hwnd) InvalidateRect(hwnd, NULL, FALSE);
   }
   void performRedo() {
     if (!undo.canRedo()) return;
@@ -4843,6 +4845,7 @@ regex_color: 0.8 0.4 0.2 1.0
     rebuildLineStarts();
     ensureCaretVisible();
     updateDirtyFlag();
+    if (hwnd) InvalidateRect(hwnd, NULL, FALSE);
   }
   int ShowTaskDialog(const wchar_t* title, const wchar_t* instruction,
                      const wchar_t* content,
@@ -5519,15 +5522,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           break;
         case ID_CUT:
           g_editor.cutToClipboard();
+          InvalidateRect(hwnd, NULL, FALSE);
           break;
         case ID_PASTE:
           g_editor.pasteFromClipboard();
+          InvalidateRect(hwnd, NULL, FALSE);
           break;
         case ID_GO_TO_LINE:
           g_editor.showGoToDialog();
           break;
         case ID_DELETE_LINES:
           g_editor.deleteLines();
+          InvalidateRect(hwnd, NULL, FALSE);
           break;
         case ID_UPPERCASE:
           g_editor.convertCase(true);
@@ -5587,6 +5593,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             g_editor.insertAtCursors("\t");
           else
             g_editor.indentLines(false);
+          InvalidateRect(hwnd, NULL, FALSE);
           break;
         case ID_UNINDENT:
           g_editor.unindentLines();
