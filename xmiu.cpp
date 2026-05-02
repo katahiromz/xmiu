@@ -5897,6 +5897,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowX", REG_DWORD, &WindowX, sizeof(WindowX));
       SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowY", REG_DWORD, &WindowY, sizeof(WindowY));
     } break;
+    case WM_INITMENUPOPUP: {
+      HMENU hMenu = (HMENU)wParam;
+      EnableMenuItem(hMenu, ID_UNDO, g_editor.undo.canUndo() ? MF_ENABLED : MF_GRAYED);
+      EnableMenuItem(hMenu, ID_REDO, g_editor.undo.canRedo() ? MF_ENABLED : MF_GRAYED);
+    } break;
     case WM_RBUTTONDOWN: {
       POINT pt;
       pt.x = (short)LOWORD(lParam);
