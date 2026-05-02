@@ -18,6 +18,7 @@
 
 #define IDD_FIND_DIALOG                     102
 #define IDD_GOTO_DIALOG                     103
+#define IDD_ABOUT                           104
 
 #define IDI_ICON1                           101
 
@@ -116,6 +117,7 @@
 #define ID_MOVE_CONTROL_NEXT                10082
 #define ID_MOVE_CONTROL_SHIFT_NEXT          10083
 #define ID_OPEN_README                      10084
+#define ID_ABOUT                            10085
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS

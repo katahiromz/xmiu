@@ -21,6 +21,20 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 //////////////////////////////////////////////////////////////////////////////
+// RT_DIALOG
+
+IDD_ABOUT DIALOG 0, 0, 158, 124
+CAPTION "xmiu"
+STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_CAPTION
+FONT 12, "MS Shell Dlg"
+{
+    DEFPUSHBUTTON "OK", IDOK, 50, 105, 60, 15
+    ICON IDI_ICON1, ico1, 10, 10, 0, 0
+    LTEXT "xmiu v1.0.23", -1, 35, 10, 120, 15
+    CONTROL "License: MIT (Freeware)\r\n\r\nCopyright (c) 2025 kenjinote (hack.jp)\r\nCopyright (c) 2026 Katayama Hirofumi MZ (katayama.hirofumi.mz@gmail.com)\r\n", -1, "EDIT", ES_READONLY | ES_MULTILINE | WS_BORDER | WS_TABSTOP, 5, 35, 150, 60
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // RT_ACCELERATOR
 
 IDR_MAINACCEL ACCELERATORS

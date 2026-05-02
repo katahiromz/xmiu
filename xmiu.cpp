@@ -5,6 +5,7 @@
 // Copyright (c) 2026 Katayama Hirofumi MZ (katayama.hirofumi.mz@gmail.com)
 #define NOMINMAX
 #include <windows.h>
+#include <windowsx.h>
 #include <shellapi.h>
 #include <d3d11.h>
 #include <dxgi1_2.h>
@@ -101,6 +102,72 @@ static UINT MapCedEncodingToCodePage(Encoding enc) {
     default:
       return CP_ACP;
   }
+}
+inline void RepositionPointDx(LPPOINT ppt, SIZE siz, LPCRECT prc)
+{
+    if (ppt->x + siz.cx > prc->right)
+        ppt->x = prc->right - siz.cx;
+    if (ppt->y + siz.cy > prc->bottom)
+        ppt->y = prc->bottom - siz.cy;
+    if (ppt->x < prc->left)
+        ppt->x = prc->left;
+    if (ppt->y < prc->top)
+        ppt->y = prc->top;
+}
+static void CenterWindowDx(HWND hwnd)
+{
+    BOOL bChild = !!(GetWindowStyle(hwnd) & WS_CHILD);
+
+    HWND hwndParent;
+    if (bChild)
+        hwndParent = ::GetParent(hwnd);
+    else
+        hwndParent = ::GetWindow(hwnd, GW_OWNER);
+
+    RECT rcWorkArea;
+    MONITORINFO mi;
+    mi.cbSize = sizeof(mi);
+    HMONITOR hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+    if (GetMonitorInfo(hMonitor, &mi))
+    {
+        rcWorkArea = mi.rcWork;
+    }
+    else
+    {
+       ::SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+    }
+
+    RECT rcParent;
+    if (hwndParent)
+        ::GetWindowRect(hwndParent, &rcParent);
+    else
+        rcParent = rcWorkArea;
+
+    SIZE sizParent = { rcParent.right - rcParent.left, rcParent.bottom - rcParent.top };
+
+    RECT rc;
+    ::GetWindowRect(hwnd, &rc);
+    SIZE siz = { rc.right - rc.left, rc.bottom - rc.top };
+
+    POINT pt;
+    pt.x = rcParent.left + (sizParent.cx - siz.cx) / 2;
+    pt.y = rcParent.top + (sizParent.cy - siz.cy) / 2;
+
+    if (bChild && hwndParent)
+    {
+        ::GetClientRect(hwndParent, &rcParent);
+        ::MapWindowPoints(hwndParent, NULL, (LPPOINT)&rcParent, 2);
+        RepositionPointDx(&pt, siz, &rcParent);
+
+        ::ScreenToClient(hwndParent, &pt);
+    }
+    else
+    {
+        RepositionPointDx(&pt, siz, &rcWorkArea);
+    }
+
+    ::SetWindowPos(hwnd, NULL, pt.x, pt.y, 0, 0,
+                   SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 static DetectResult DetectEncodingEx(const char* buf, size_t len) {
   DetectResult res = {ENC_UTF8_NOBOM, CP_UTF8};
@@ -642,6 +709,25 @@ class CustomTextRenderer : public IDWriteTextRenderer {
     return E_NOINTERFACE;
   }
 };
+static INT_PTR CALLBACK
+AboutDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  switch (uMsg)
+  {
+  case WM_INITDIALOG:
+    CenterWindowDx(hwnd);
+    return TRUE;
+  case WM_COMMAND:
+    switch (LOWORD(wParam)) {
+      case IDOK:
+      case IDCANCEL:
+        EndDialog(hwnd, LOWORD(wParam));
+        break;
+    }
+    break;
+  }
+  return 0;
+}
 struct Editor {
   HWND hwnd = NULL;
   HICON hFileIcon = NULL;
@@ -5300,10 +5386,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         g_editor.checkFileModification();
       }
     case WM_COMMAND:
-      if (g_editor.showHelpPopup && LOWORD(wParam) != ID_HELP) {
-        g_editor.showHelpPopup = false;
-        InvalidateRect(hwnd, NULL, FALSE);
-      }
+      //if (g_editor.showHelpPopup && LOWORD(wParam) != ID_HELP) {
+      //  g_editor.showHelpPopup = false;
+      //  InvalidateRect(hwnd, NULL, FALSE);
+      //}
       switch (LOWORD(wParam)) {
         case ID_NEW:
           g_editor.newFile();
@@ -5321,10 +5407,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case ID_SAVE_AS:
           g_editor.saveFileAs();
           break;
-        case ID_HELP:
-          g_editor.showHelpPopup = !g_editor.showHelpPopup;
-          InvalidateRect(hwnd, NULL, FALSE);
-          break;
+        //case ID_HELP:
+        //  g_editor.showHelpPopup = !g_editor.showHelpPopup;
+        //  InvalidateRect(hwnd, NULL, FALSE);
+        //  break;
         case ID_TOGGLE_FULLSCREEN:
           g_editor.toggleFullScreen();
           break;
@@ -5572,6 +5658,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             ShellExecuteW(hwnd, NULL, L"notepad.exe", strPath.c_str(), NULL, SW_SHOWNORMAL);
           }
           break;
+        case ID_ABOUT:
+          DialogBox(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDD_ABOUT), hwnd, AboutDialogProc);
+          break;
       }
       break;
     case WM_SETCURSOR: {
@@ -5633,10 +5722,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       if (w > 0 && h > 0) g_editor.resizeSwapChain(w, h);
     } break;
     case WM_LBUTTONDOWN: {
-      if (g_editor.showHelpPopup) {
-        g_editor.showHelpPopup = false;
-        InvalidateRect(hwnd, NULL, FALSE);
-      }
+      //if (g_editor.showHelpPopup) {
+      //  g_editor.showHelpPopup = false;
+      //  InvalidateRect(hwnd, NULL, FALSE);
+      //}
       int x = (short)LOWORD(lParam);
       int y = (short)HIWORD(lParam);
       RECT rc;
@@ -6079,10 +6168,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       }
       break;
     case WM_CHAR: {
-      if (g_editor.showHelpPopup) {
-        g_editor.showHelpPopup = false;
-        InvalidateRect(hwnd, NULL, FALSE);
-      }
+      //if (g_editor.showHelpPopup) {
+      //  g_editor.showHelpPopup = false;
+      //  InvalidateRect(hwnd, NULL, FALSE);
+      //}
       wchar_t c = (wchar_t)wParam;
       if (c < 32 && c != 8 && c != 13) break;
       if (c == 8) {
@@ -6164,8 +6253,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         WCHAR file[MAX_PATH];
         if (DragQueryFileW(hDrop, 0, file, MAX_PATH) &&
             g_editor.openFileFromPath(file) && g_editor.showHelpPopup) {
-          g_editor.showHelpPopup = false;
-          InvalidateRect(hwnd, NULL, FALSE);
+          //g_editor.showHelpPopup = false;
+          //InvalidateRect(hwnd, NULL, FALSE);
         }
         DragFinish(hDrop);
       }
@@ -6246,21 +6335,21 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   if (!fileToOpen.empty()) {
     g_editor.openFileFromPath(fileToOpen);
   } else {
-    g_editor.showHelpPopup = true;
-    InvalidateRect(hwnd, NULL, FALSE);
+    //g_editor.showHelpPopup = true;
+    //InvalidateRect(hwnd, NULL, FALSE);
   }
   LocalFree(argv);
   g_editor.updateTitleBar();
   MSG msg;
   while (GetMessage(&msg, NULL, 0, 0)) {
-    if (g_editor.showHelpPopup) {
-      switch (msg.message) {
-        case WM_CHAR: case WM_LBUTTONDOWN:
-          g_editor.showHelpPopup = false;
-          InvalidateRect(hwnd, NULL, FALSE);
-          break;
-      }
-    }
+    //if (g_editor.showHelpPopup) {
+    //  switch (msg.message) {
+    //    case WM_CHAR: case WM_LBUTTONDOWN:
+    //      g_editor.showHelpPopup = false;
+    //      InvalidateRect(hwnd, NULL, FALSE);
+    //      break;
+    //  }
+    //}
     if (!g_editor.hFindDlg || !IsDialogMessage(g_editor.hFindDlg, &msg)) {
       if (!hAccel || !TranslateAcceleratorW(hwnd, hAccel, &msg)) {
         TranslateMessage(&msg);
