@@ -10,68 +10,68 @@ LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
 
 IDR_MAINMENU MENU
 {
-    POPUP "ファイル(&F)"
+    POPUP "파일(&F)"
     {
-        MENUITEM "新規作成(&N)\tCtrl+N", ID_NEW
-        MENUITEM "新しいウィンドウ(&W)\tCtrl+Shift+N", ID_NEW_WINDOW
+        MENUITEM "새로 만들기(&N)\tCtrl+N", ID_NEW
+        MENUITEM "새 창(&W)\tCtrl+Shift+N", ID_NEW_WINDOW
         MENUITEM SEPARATOR
-        MENUITEM "開く(&O)...\tCtrl+O", ID_OPEN
-        MENUITEM "上書き保存(&S)\tCtrl+S", ID_SAVE
-        MENUITEM "名前を付けて保存(&A)...\tCtrl+Shift+S", ID_SAVE_AS
+        MENUITEM "열기(&O)...\tCtrl+O", ID_OPEN
+        MENUITEM "저장(&S)\tCtrl+S", ID_SAVE
+        MENUITEM "다른 이름으로 저장(&A)...\tCtrl+Shift+S", ID_SAVE_AS
         MENUITEM SEPARATOR
-        MENUITEM "設定(&C)...\tAlt+Shift+Enter", ID_CONFIG
-        MENUITEM "設定の消去(&R)...", ID_KILL_CONFIG
+        MENUITEM "설정(&C)...\tAlt+Shift+Enter", ID_CONFIG
+        MENUITEM "설정 초기화(&R)...", ID_KILL_CONFIG
         MENUITEM SEPARATOR
-        MENUITEM "ファイルのプロパティ(&Y)\tAlt+Enter", ID_FILE_PROP
-        MENUITEM "終了(&X)\tAlt+F4", ID_EXIT
+        MENUITEM "파일 속성(&Y)\tAlt+Enter", ID_FILE_PROP
+        MENUITEM "끝내기(&X)\tAlt+F4", ID_EXIT
     }
-    POPUP "編集(&E)"
+    POPUP "편집(&E)"
     {
-        MENUITEM "元に戻す(&U)\tCtrl+Z", ID_UNDO
-        MENUITEM "やり直し(&R)\tCtrl+Y", ID_REDO
+        MENUITEM "실행 취소(&U)\tCtrl+Z", ID_UNDO
+        MENUITEM "다시 실행(&R)\tCtrl+Y", ID_REDO
         MENUITEM SEPARATOR
-        MENUITEM "切り取り(&T)\tCtrl+X", ID_CUT
-        MENUITEM "コピー(&C)\tCtrl+C", ID_COPY
-        MENUITEM "貼り付け(&P)\tCtrl+V", ID_PASTE
-        MENUITEM "削除(&D)\tDel", ID_DELETE
+        MENUITEM "잘라내기(&T)\tCtrl+X", ID_CUT
+        MENUITEM "복사(&C)\tCtrl+C", ID_COPY
+        MENUITEM "붙여넣기(&P)\tCtrl+V", ID_PASTE
+        MENUITEM "삭제(&D)\tDel", ID_DELETE
         MENUITEM SEPARATOR
-        MENUITEM "行削除(&L)\tCtrl+K", ID_DELETE_LINES
+        MENUITEM "줄 삭제(&L)\tCtrl+K", ID_DELETE_LINES
         MENUITEM SEPARATOR
-        MENUITEM "すべて選択(&A)\tCtrl+A", ID_SELECT_ALL
+        MENUITEM "모두 선택(&A)\tCtrl+A", ID_SELECT_ALL
     }
-    POPUP "検索(&S)"
+    POPUP "검색(&S)"
     {
-        MENUITEM "検索(&F)...\tCtrl+F", ID_SHOW_FIND
-        MENUITEM "置換(&R)...\tCtrl+H", ID_SHOW_REPLACE
+        MENUITEM "찾기(&F)...\tCtrl+F", ID_SHOW_FIND
+        MENUITEM "바꾸기(&R)...\tCtrl+H", ID_SHOW_REPLACE
         MENUITEM SEPARATOR
-        MENUITEM "次を検索(&N)\tF3", ID_FIND_NEXT
-        MENUITEM "前を検索(&P)\tShift+F3", ID_FIND_PREV
+        MENUITEM "다음 찾기(&N)\tF3", ID_FIND_NEXT
+        MENUITEM "이전 찾기(&P)\tShift+F3", ID_FIND_PREV
         MENUITEM SEPARATOR
-        MENUITEM "指定行に移動(&G)...\tCtrl+G", ID_GO_TO_LINE
+        MENUITEM "줄 이동(&G)...\tCtrl+G", ID_GO_TO_LINE
         MENUITEM SEPARATOR
-        MENUITEM "対応するカッコを探す(&B)\tCtrl+]", ID_JUMP_TO_MATCHING_BRACKET
+        MENUITEM "대응하는 괄호 찾기(&B)\tCtrl+]", ID_JUMP_TO_MATCHING_BRACKET
     }
-    POPUP "変換(&C)"
+    POPUP "변환(&C)"
     {
-        MENUITEM "大文字に変換(&U)\tCtrl+U", ID_UPPERCASE
-        MENUITEM "小文字に変換(&L)\tCtrl+Shift+U", ID_LOWERCASE
+        MENUITEM "대문자로 변환(&U)\tCtrl+U", ID_UPPERCASE
+        MENUITEM "소문자로 변환(&L)\tCtrl+Shift+U", ID_LOWERCASE
     }
-    POPUP "表示(&V)"
+    POPUP "보기(&V)"
     {
-        MENUITEM "拡大\tCtrl+[+]", ID_ZOOM_IN
-        MENUITEM "縮小\tCtrl+[-]", ID_ZOOM_OUT
+        MENUITEM "확대\tCtrl+[+]", ID_ZOOM_IN
+        MENUITEM "축소\tCtrl+[-]", ID_ZOOM_OUT
         MENUITEM SEPARATOR
-        MENUITEM "ズーム 100%\tCtrl+0", ID_ZOOM_100
+        MENUITEM "100% 보기\tCtrl+0", ID_ZOOM_100
         MENUITEM SEPARATOR
-        MENUITEM "単語の折り返し(&W)\tAlt+Z", ID_WORD_WRAP_MODE
+        MENUITEM "자동 줄 바꿈(&W)\tAlt+Z", ID_WORD_WRAP_MODE
         MENUITEM SEPARATOR
-        MENUITEM "全画面表示(&F)\tF11", ID_TOGGLE_FULLSCREEN
+        MENUITEM "전체 화면(&F)\tF11", ID_TOGGLE_FULLSCREEN
     }
-    POPUP "ヘルプ(&H)"
+    POPUP "도움말(&H)"
     {
-        MENUITEM "READMEを開く(&R)", ID_OPEN_README
+        MENUITEM "README 열기(&R)", ID_OPEN_README
         MENUITEM SEPARATOR
-        MENUITEM "バージョン情報(&A)...", ID_ABOUT
+        MENUITEM "정보(&A)...", ID_ABOUT
     }
 }
 

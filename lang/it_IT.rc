@@ -10,68 +10,68 @@ LANGUAGE LANG_ITALIAN, SUBLANG_DEFAULT
 
 IDR_MAINMENU MENU
 {
-    POPUP "ファイル(&F)"
+    POPUP "&File"
     {
-        MENUITEM "新規作成(&N)\tCtrl+N", ID_NEW
-        MENUITEM "新しいウィンドウ(&W)\tCtrl+Shift+N", ID_NEW_WINDOW
+        MENUITEM "&Nuovo\tCtrl+N", ID_NEW
+        MENUITEM "Nuova &finestra\tCtrl+Shift+N", ID_NEW_WINDOW
         MENUITEM SEPARATOR
-        MENUITEM "開く(&O)...\tCtrl+O", ID_OPEN
-        MENUITEM "上書き保存(&S)\tCtrl+S", ID_SAVE
-        MENUITEM "名前を付けて保存(&A)...\tCtrl+Shift+S", ID_SAVE_AS
+        MENUITEM "&Apri...\tCtrl+O", ID_OPEN
+        MENUITEM "&Salva\tCtrl+S", ID_SAVE
+        MENUITEM "Salva con &nome...\tCtrl+Shift+S", ID_SAVE_AS
         MENUITEM SEPARATOR
-        MENUITEM "設定(&C)...\tAlt+Shift+Enter", ID_CONFIG
-        MENUITEM "設定の消去(&R)...", ID_KILL_CONFIG
+        MENUITEM "&Impostazioni...\tAlt+Shift+Enter", ID_CONFIG
+        MENUITEM "&Ripristina impostazioni...", ID_KILL_CONFIG
         MENUITEM SEPARATOR
-        MENUITEM "ファイルのプロパティ(&Y)\tAlt+Enter", ID_FILE_PROP
-        MENUITEM "終了(&X)\tAlt+F4", ID_EXIT
+        MENUITEM "P&roprietà del file\tAlt+Enter", ID_FILE_PROP
+        MENUITEM "&Esci\tAlt+F4", ID_EXIT
     }
-    POPUP "編集(&E)"
+    POPUP "&Modifica"
     {
-        MENUITEM "元に戻す(&U)\tCtrl+Z", ID_UNDO
-        MENUITEM "やり直し(&R)\tCtrl+Y", ID_REDO
+        MENUITEM "&Annulla\tCtrl+Z", ID_UNDO
+        MENUITEM "&Ripristina\tCtrl+Y", ID_REDO
         MENUITEM SEPARATOR
-        MENUITEM "切り取り(&T)\tCtrl+X", ID_CUT
-        MENUITEM "コピー(&C)\tCtrl+C", ID_COPY
-        MENUITEM "貼り付け(&P)\tCtrl+V", ID_PASTE
-        MENUITEM "削除(&D)\tDel", ID_DELETE
+        MENUITEM "&Taglia\tCtrl+X", ID_CUT
+        MENUITEM "&Copia\tCtrl+C", ID_COPY
+        MENUITEM "&Incolla\tCtrl+V", ID_PASTE
+        MENUITEM "&Elimina\tDel", ID_DELETE
         MENUITEM SEPARATOR
-        MENUITEM "行削除(&L)\tCtrl+K", ID_DELETE_LINES
+        MENUITEM "Elimina &righe\tCtrl+K", ID_DELETE_LINES
         MENUITEM SEPARATOR
-        MENUITEM "すべて選択(&A)\tCtrl+A", ID_SELECT_ALL
+        MENUITEM "Seleziona &tutto\tCtrl+A", ID_SELECT_ALL
     }
-    POPUP "検索(&S)"
+    POPUP "&Cerca"
     {
-        MENUITEM "検索(&F)...\tCtrl+F", ID_SHOW_FIND
-        MENUITEM "置換(&R)...\tCtrl+H", ID_SHOW_REPLACE
+        MENUITEM "&Trova...\tCtrl+F", ID_SHOW_FIND
+        MENUITEM "S&ostituisci...\tCtrl+H", ID_SHOW_REPLACE
         MENUITEM SEPARATOR
-        MENUITEM "次を検索(&N)\tF3", ID_FIND_NEXT
-        MENUITEM "前を検索(&P)\tShift+F3", ID_FIND_PREV
+        MENUITEM "Trova &successivo\tF3", ID_FIND_NEXT
+        MENUITEM "Trova &precedente\tShift+F3", ID_FIND_PREV
         MENUITEM SEPARATOR
-        MENUITEM "指定行に移動(&G)...\tCtrl+G", ID_GO_TO_LINE
+        MENUITEM "&Vai alla riga...\tCtrl+G", ID_GO_TO_LINE
         MENUITEM SEPARATOR
-        MENUITEM "対応するカッコを探す(&B)\tCtrl+]", ID_JUMP_TO_MATCHING_BRACKET
+        MENUITEM "Salta alla parentesi corrispondente (&B)\tCtrl+]", ID_JUMP_TO_MATCHING_BRACKET
     }
-    POPUP "変換(&C)"
+    POPUP "Con&verti"
     {
-        MENUITEM "大文字に変換(&U)\tCtrl+U", ID_UPPERCASE
-        MENUITEM "小文字に変換(&L)\tCtrl+Shift+U", ID_LOWERCASE
+        MENUITEM "&Maiuscolo\tCtrl+U", ID_UPPERCASE
+        MENUITEM "Mi&nuscolo\tCtrl+Shift+U", ID_LOWERCASE
     }
-    POPUP "表示(&V)"
+    POPUP "&Visualizza"
     {
-        MENUITEM "拡大\tCtrl+[+]", ID_ZOOM_IN
-        MENUITEM "縮小\tCtrl+[-]", ID_ZOOM_OUT
+        MENUITEM "Zoom a&vanti\tCtrl+[+]", ID_ZOOM_IN
+        MENUITEM "Zoom indie&tro\tCtrl+[-]", ID_ZOOM_OUT
         MENUITEM SEPARATOR
-        MENUITEM "ズーム 100%\tCtrl+0", ID_ZOOM_100
+        MENUITEM "Zoom &100%\tCtrl+0", ID_ZOOM_100
         MENUITEM SEPARATOR
-        MENUITEM "単語の折り返し(&W)\tAlt+Z", ID_WORD_WRAP_MODE
+        MENUITEM "A &capo automatico\tAlt+Z", ID_WORD_WRAP_MODE
         MENUITEM SEPARATOR
-        MENUITEM "全画面表示(&F)\tF11", ID_TOGGLE_FULLSCREEN
+        MENUITEM "Schermo &intero\tF11", ID_TOGGLE_FULLSCREEN
     }
-    POPUP "ヘルプ(&H)"
+    POPUP "A&iuto"
     {
-        MENUITEM "READMEを開く(&R)", ID_OPEN_README
+        MENUITEM "Apri &README", ID_OPEN_README
         MENUITEM SEPARATOR
-        MENUITEM "バージョン情報(&A)...", ID_ABOUT
+        MENUITEM "&Informazioni...", ID_ABOUT
     }
 }
 
