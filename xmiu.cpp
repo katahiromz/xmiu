@@ -5389,10 +5389,10 @@ regex_color: 0.8 0.4 0.2 1.0
         cf.lpLogFont = &lf;
         cf.Flags = CF_INITTOLOGFONTSTRUCT | CF_NOSCRIPTSEL | CF_NOVERTFONTS;
         if (ChooseFont(&cf)) {
+          s_lf = lf;
           float fontSize = pointsFromFontHeight(s_lf.lfHeight);
           swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
           SetDlgItemTextW(hwnd, edt1, text);
-          s_lf = lf;
         }
         break;
       }
