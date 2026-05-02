@@ -48,15 +48,15 @@ struct DetectResult {
   MiuEncoding type;
   UINT codePage;
 };
-static float pointsFromFontHeight(LONG lfHeight) {
+static float pointsFromFontHeight(LONG lfHeight, INT dpi = 96) {
   HDC hDC = GetDC(NULL);
-  float points = (float)MulDiv(labs(lfHeight), 96, GetDeviceCaps(hDC, LOGPIXELSY));
+  float points = (float)MulDiv(labs(lfHeight), dpi, GetDeviceCaps(hDC, LOGPIXELSY));
   ReleaseDC(NULL, hDC);
   return points;
 }
-static LONG fontHeightFromPoints(float points) {
+static LONG fontHeightFromPoints(float points, INT dpi = 96) {
   HDC hDC = GetDC(NULL);
-  LONG lfHeight = -MulDiv((INT)std::round(points), GetDeviceCaps(hDC, LOGPIXELSY), 96);
+  LONG lfHeight = -MulDiv((INT)std::round(points), GetDeviceCaps(hDC, LOGPIXELSY), dpi);
   ReleaseDC(NULL, hDC);
   return lfHeight;
 }
@@ -5376,7 +5376,7 @@ regex_color: 0.8 0.4 0.2 1.0
         pEditor = (Editor*)psp->lParam;
         s_lf = pEditor->LogFont;
         SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)pEditor);
-        float fontSize = pointsFromFontHeight(s_lf.lfHeight);
+        float fontSize = pointsFromFontHeight(s_lf.lfHeight, 72);
         swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
         SetDlgItemTextW(hwnd, edt1, text);
         CenterWindowDx(GetParent(hwnd));
@@ -5393,7 +5393,7 @@ regex_color: 0.8 0.4 0.2 1.0
           cf.Flags = CF_INITTOLOGFONTSTRUCT | CF_NOSCRIPTSEL | CF_NOVERTFONTS;
           if (ChooseFont(&cf)) {
             s_lf = lf;
-            float fontSize = pointsFromFontHeight(s_lf.lfHeight);
+            float fontSize = pointsFromFontHeight(s_lf.lfHeight, 72);
             swprintf(text, _countof(text), L"%s, %.1f pt", s_lf.lfFaceName, fontSize);
             SetDlgItemTextW(hwnd, edt1, text);
             PropSheet_Changed(GetParent(hwnd), hwnd);
@@ -5504,8 +5504,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.updateFont(g_editor.currentFontSize * 1.1f);
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+          LONG lfHeight = fontHeightFromPoints(g_editor.currentFontSize);
+          float points = pointsFromFontHeight(lfHeight, 72);
           std::wstringstream ss;
-          ss << (int)g_editor.currentFontSize << L" pt";
+          ss << (int)points << L" pt";
           g_editor.zoomPopupText = ss.str();
           SetTimer(hwnd, 1, 1000, NULL);
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5514,8 +5516,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.updateFont(g_editor.currentFontSize * 0.9f);
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+          LONG lfHeight = fontHeightFromPoints(g_editor.currentFontSize);
+          float points = pointsFromFontHeight(lfHeight, 72);
           std::wstringstream ss;
-          ss << (int)g_editor.currentFontSize << L" pt";
+          ss << (int)points << L" pt";
           g_editor.zoomPopupText = ss.str();
           SetTimer(hwnd, 1, 1000, NULL);
           InvalidateRect(hwnd, NULL, FALSE);
@@ -5530,8 +5534,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           g_editor.updateFont(21.0f);
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
+          LONG lfHeight = fontHeightFromPoints(g_editor.currentFontSize);
+          float points = pointsFromFontHeight(lfHeight, 72);
           std::wstringstream ss;
-          ss << (int)g_editor.currentFontSize << L" pt";
+          ss << (int)points << L" pt";
           g_editor.zoomPopupText = ss.str();
           SetTimer(hwnd, 1, 1000, NULL);
           InvalidateRect(hwnd, NULL, FALSE);
