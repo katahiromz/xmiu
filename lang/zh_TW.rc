@@ -58,8 +58,8 @@ IDR_MAINMENU MENU
     }
     POPUP "表示(&V)"
     {
-        MENUITEM "ズーム イン\tCtrl+[+]", ID_ZOOM_IN
-        MENUITEM "ズーム アウト\tCtrl+[-]", ID_ZOOM_OUT
+        MENUITEM "拡大\tCtrl+[+]", ID_ZOOM_IN
+        MENUITEM "縮小\tCtrl+[-]", ID_ZOOM_OUT
         MENUITEM SEPARATOR
         MENUITEM "ズーム 100%\tCtrl+0", ID_ZOOM_100
         MENUITEM SEPARATOR
