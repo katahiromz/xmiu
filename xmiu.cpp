@@ -5897,6 +5897,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowX", REG_DWORD, &WindowX, sizeof(WindowX));
       SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowY", REG_DWORD, &WindowY, sizeof(WindowY));
     } break;
+    case WM_RBUTTONDOWN: {
+      POINT pt;
+      pt.x = (short)LOWORD(lParam);
+      pt.y = (short)HIWORD(lParam);
+      ClientToScreen(hwnd, &pt);
+      HMENU hMenu = LoadMenu(GetModuleHandleW(NULL), MAKEINTRESOURCEW(IDR_MAINMENU));
+      HMENU hEditMenu = GetSubMenu(hMenu, 1);
+      SetForegroundWindow(hwnd);
+      INT id = (INT)TrackPopupMenuEx(hEditMenu, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD,
+                                     pt.x, pt.y, hwnd, NULL);
+      if (id != 0 && id != -1) {
+        PostMessageW(hwnd, WM_COMMAND, id, 0);
+      }
+      PostMessageW(hwnd, WM_NULL, 0, 0);
+      DestroyMenu(hMenu);
+    } break;
     case WM_LBUTTONDOWN: {
       int x = (short)LOWORD(lParam);
       int y = (short)HIWORD(lParam);
