@@ -5880,7 +5880,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       int w = rc.right - rc.left;
       int h = rc.bottom - rc.top;
       if (w > 0 && h > 0) g_editor.resizeSwapChain(w, h);
-      if (IsIconic(hwnd))
+      if (IsIconic(hwnd) || IsZoomed(hwnd))
         break;
       GetWindowRect(hwnd, &rc);
       INT WindowCX = rc.right - rc.left;
@@ -5889,7 +5889,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
       SHSetValue(HKEY_CURRENT_USER, APP_KEY, L"WindowCY", REG_DWORD, &WindowCY, sizeof(WindowCY));
     } break;
     case WM_MOVE: {
-      if (IsIconic(hwnd))
+      if (IsIconic(hwnd) || IsZoomed(hwnd))
         break;
       RECT rc;
       GetWindowRect(hwnd, &rc);
