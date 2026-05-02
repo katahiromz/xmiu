@@ -49,7 +49,7 @@ IDR_MAINMENU MENU
         MENUITEM SEPARATOR
         MENUITEM "指定行に移動(&G)...\tCtrl+G", ID_GO_TO_LINE
         MENUITEM SEPARATOR
-        MENUITEM "対カッコの検索(&B)\tCtrl+B", ID_JUMP_TO_MATCHING_BRACKET
+        MENUITEM "対応するカッコを探す(&B)\tCtrl+]", ID_JUMP_TO_MATCHING_BRACKET
     }
     POPUP "変換(&C)"
     {
