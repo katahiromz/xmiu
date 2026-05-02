@@ -5566,7 +5566,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
           InvalidateRect(hwnd, NULL, FALSE);
           break;
         case ID_ZOOM_100: {
-          g_editor.updateFont(21.0f);
+          float fontSize = pointsFromFontHeight(DEFAULT_FONT_HEIGHT);
+          g_editor.updateFont(fontSize);
           g_editor.rebuildLineStarts();
           g_editor.zoomPopupEndTime = GetTickCount64() + 1000;
           LONG lfHeight = fontHeightFromPoints(g_editor.currentFontSize);
