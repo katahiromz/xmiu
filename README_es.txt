@@ -12,14 +12,8 @@
     Ctrl+]              Ir al paréntesis correspondiente
     Ctrl+Z/Y            Deshacer/Rehacer
     Ctrl+X/C/V          Cortar/Copiar/Pegar
-    Ctrl+Shift+K        Eliminar línea
-    Ctrl+U              Mayúsculas
-    Ctrl+Shift+U        Minúsculas
-    Alt+Up/Down         Mover línea
-    Alt+Shift+Up/Down   Copiar línea
     Ctrl+A              Seleccionar todo
     Alt+Drag            Selección rect.
-    Alt+Z               Ajuste de línea
     Ctrl+Wheel/+/-      Zoom
     Ctrl+0              Restablecer zoom
     F11                 Pantalla completa

@@ -22,14 +22,8 @@ xmiu（ペケミウ）は、Windows用のテキストエディタです。
     Ctrl+]              対応するカッコにジャンプ
     Ctrl+Z/Y            元に戻す/やり直し
     Ctrl+X/C/V          切り取り/コピー/貼り付け
-    Ctrl+Shift+K        行削除
-    Ctrl+U              大文字へ変換
-    Ctrl+Shift+U        小文字へ変換
-    Alt+Up/Down         行移動
-    Alt+Shift+Up/Down   行コピー
     Ctrl+A              すべて選択
     Alt+Drag            矩形選択
-    Alt+Z               折り返し
     Ctrl+Wheel/+/-      ズーム
     Ctrl+0              ズームリセット
     F11                 全画面表示

@@ -12,14 +12,8 @@
     Ctrl+]              Ga naar bijbehorend haakje
     Ctrl+Z/Y            Ongedaan maken/Opnieuw
     Ctrl+X/C/V          Knippen/Kopiëren/Plakken
-    Ctrl+Shift+K        Regel verwijderen
-    Ctrl+U              Hoofdletters
-    Ctrl+Shift+U        Kleine letters
-    Alt+Up/Down         Regel verplaatsen
-    Alt+Shift+Up/Down   Regel kopiëren
     Ctrl+A              Alles selecteren
     Alt+Drag            Rechthoekige selectie
-    Alt+Z               Tekstterugloop
     Ctrl+Wheel/+/-      Zoomen
     Ctrl+0              Zoom herstellen
     F11                 Volledig scherm

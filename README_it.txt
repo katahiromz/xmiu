@@ -12,14 +12,10 @@
     Ctrl+]              Vai alla parentesi corrispondente
     Ctrl+Z/Y            Annulla/Ripeti
     Ctrl+X/C/V          Taglia/Copia/Incolla
-    Ctrl+Shift+K        Elimina riga
-    Ctrl+U              Maiuscolo
-    Ctrl+Shift+U        Minuscolo
     Alt+Su/Giù          Sposta riga
     Alt+Shift+Su/Giù    Copia riga
     Ctrl+A              Seleziona tutto
     Alt+Drag            Sel. rettangolare
-    Alt+Z               A capo automatico
     Ctrl+Rotellina/+/-  Zoom
     Ctrl+0              Reimposta zoom
     F11                 Schermo intero

@@ -13,13 +13,10 @@
     Ctrl+Z/Y            Annuler/Rétablir
     Ctrl+X/C/V          Couper/Copier/Coller
     Ctrl+Maj+K          Supprimer la ligne
-    Ctrl+U              Majuscules
-    Ctrl+Maj+U          Minuscules
     Alt+Haut/Bas        Déplacer la ligne
     Alt+Maj+Haut/Bas    Copier la ligne
     Ctrl+A              Tout sélectionner
     Alt+Glisser         Sélect. rectangulaire
-    Alt+Z               Retour à la ligne
     Ctrl+Molette/+/-    Zoom
     Ctrl+0              Réinitialiser le zoom
     F11                 Plein écran

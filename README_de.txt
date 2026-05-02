@@ -18,8 +18,6 @@
     Alt+Umschalt+Auf/Ab Zeile kopieren
     Strg+D              Wort markieren / Nächstes
     Strg+A              Alles markieren
-    Alt+Ziehen          Rechteckauswahl
-    Alt+Z               Zeilenumbruch
     Strg+Mausrad/+/-    Zoom
     Strg+0              Zoom zurücksetzen
     F11                 Vollbild
