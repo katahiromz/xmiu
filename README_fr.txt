@@ -9,7 +9,7 @@
     Ctrl+H              Remplacer
     F3 / Maj+F3         Rechercher suiv/préc
     Ctrl+G              Aller à la ligne
-    Ctrl+B              Aller à la parenthèse correspondante
+    Ctrl+]              Aller à la parenthèse correspondante
     Ctrl+Z/Y            Annuler/Rétablir
     Ctrl+X/C/V          Couper/Copier/Coller
     Ctrl+Maj+K          Supprimer la ligne

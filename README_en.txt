@@ -9,7 +9,7 @@
     Ctrl+H              Replace
     F3 / Shift+F3       Find Next/Prev
     Ctrl+G              Go To Line
-    Ctrl+B              Jump to matching bracket
+    Ctrl+]              Jump to matching bracket
     Ctrl+Z/Y            Undo/Redo
     Ctrl+X/C/V          Cut/Copy/Paste
     Ctrl+Shift+K        Delete Line

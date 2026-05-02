@@ -9,7 +9,7 @@
     Ctrl+H                Substituir
     F3 / Shift+F3         Localizar Próximo/Anterior
     Ctrl+G                Ir Para a Linha
-    Ctrl+B                Ir para o parêntese correspondente
+    Ctrl+]                Ir para o parêntese correspondente
     Ctrl+Z/Y              Desfazer/Refazer
     Ctrl+X/C/V            Recortar/Copiar/Colar
     Ctrl+Shift+K          Excluir Linha

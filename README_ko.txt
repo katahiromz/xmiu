@@ -9,7 +9,7 @@
     Ctrl+H              바꾸기
     F3 / Shift+F3       다음/이전 찾기
     Ctrl+G              줄 이동
-    Ctrl+B              일치하는 괄호로 이동
+    Ctrl+]              일치하는 괄호로 이동
     Ctrl+Z/Y            실행 취소/다시 실행
     Ctrl+X/C/V          잘라내기/복사/붙여넣기
     Ctrl+Shift+K        줄 삭제

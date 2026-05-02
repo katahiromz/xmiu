@@ -9,7 +9,7 @@
     Ctrl+H              Reemplazar
     F3 / Shift+F3       Buscar sig./ant.
     Ctrl+G              Ir a la línea
-    Ctrl+B              Ir al paréntesis correspondiente
+    Ctrl+]              Ir al paréntesis correspondiente
     Ctrl+Z/Y            Deshacer/Rehacer
     Ctrl+X/C/V          Cortar/Copiar/Pegar
     Ctrl+Shift+K        Eliminar línea

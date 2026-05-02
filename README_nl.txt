@@ -9,7 +9,7 @@
     Ctrl+H              Vervangen
     F3 / Shift+F3       Volgende/vorige zoeken
     Ctrl+G              Ga naar regel
-    Ctrl+B              Ga naar bijbehorend haakje
+    Ctrl+]              Ga naar bijbehorend haakje
     Ctrl+Z/Y            Ongedaan maken/Opnieuw
     Ctrl+X/C/V          Knippen/Kopiëren/Plakken
     Ctrl+Shift+K        Regel verwijderen

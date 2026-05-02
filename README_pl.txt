@@ -9,7 +9,7 @@
     Ctrl+H              Zamień
     F3 / Shift+F3       Znajdź następny/poprzedni
     Ctrl+G              Przejdź do linii
-    Ctrl+B              Przejdź do pasującego nawiasu
+    Ctrl+]              Przejdź do pasującego nawiasu
     Ctrl+Z/Y            Cofnij/Ponów
     Ctrl+X/C/V          Wytnij/Kopiuj/Wklej
     Ctrl+Shift+K        Usuń linię

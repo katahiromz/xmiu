@@ -9,7 +9,7 @@
     Ctrl+H              Sostituisci
     F3 / Shift+F3       Trova succ./prec.
     Ctrl+G              Vai alla riga
-    Ctrl+B              Vai alla parentesi corrispondente
+    Ctrl+]              Vai alla parentesi corrispondente
     Ctrl+Z/Y            Annulla/Ripeti
     Ctrl+X/C/V          Taglia/Copia/Incolla
     Ctrl+Shift+K        Elimina riga

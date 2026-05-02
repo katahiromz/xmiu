@@ -9,7 +9,7 @@
     Ctrl+H              取代
     F3 / Shift+F3       尋找下一個/上一個
     Ctrl+G              移至行
-    Ctrl+B              跳轉到匹配的括號
+    Ctrl+]              跳轉到匹配的括號
     Ctrl+Z/Y            復原/重做
     Ctrl+X/C/V          剪下/複製/貼上
     Ctrl+Shift+K        刪除整行

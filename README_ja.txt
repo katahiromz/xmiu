@@ -19,7 +19,7 @@ xmiu（ペケミウ）は、Windows用のテキストエディタです。
     Ctrl+H              置換
     F3 / Shift+F3       次/前を検索
     Ctrl+G              指定行へ移動
-    Ctrl+B              対応するカッコにジャンプ
+    Ctrl+]              対応するカッコにジャンプ
     Ctrl+Z/Y            元に戻す/やり直し
     Ctrl+X/C/V          切り取り/コピー/貼り付け
     Ctrl+Shift+K        行削除
