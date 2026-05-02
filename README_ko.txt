@@ -17,7 +17,6 @@
     Ctrl+Shift+U        소문자로 변환
     Alt+Up/Down         줄 이동
     Alt+Shift+Up/Down   줄 복사
-    Ctrl+D              단어 선택 / 다음
     Ctrl+A              모두 선택
     Alt+Drag            사각형 선택
     Alt+Z               자동 줄바꿈

@@ -17,7 +17,6 @@
     Ctrl+Shift+U        Małe litery
     Alt+Góra/Dół        Przenieś linię
     Alt+Shift+Góra/Dół  Kopiuj linię
-    Ctrl+D              Zaznacz słowo / Następne
     Ctrl+A              Zaznacz wszystko
     Alt+Drag            Zaznaczanie prostokątne
     Alt+Z               Zawijanie wierszy

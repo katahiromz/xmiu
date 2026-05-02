@@ -17,7 +17,6 @@
     Ctrl+Shift+U        Minúsculas
     Alt+Up/Down         Mover línea
     Alt+Shift+Up/Down   Copiar línea
-    Ctrl+D              Sel. palabra / Sig.
     Ctrl+A              Seleccionar todo
     Alt+Drag            Selección rect.
     Alt+Z               Ajuste de línea

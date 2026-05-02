@@ -17,7 +17,6 @@
     Ctrl+Shift+U          Minúsculas
     Alt+Cima/Baixo        Mover Linha
     Alt+Shift+Cima/Baixo  Copiar Linha
-    Ctrl+D                Selecionar Palavra / Próxima
     Ctrl+A                Selecionar Tudo
     Alt+Arrastar          Seleção Retangular
     Alt+Z                 Quebra de Linha

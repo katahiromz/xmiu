@@ -17,7 +17,6 @@
     Ctrl+Shift+U        转小写
     Alt+Up/Down         移动行
     Alt+Shift+Up/Down   复制行
-    Ctrl+D              选中词 / 下一个
     Ctrl+A              全选
     Alt+Drag            矩形选择
     Alt+Z               自动换行

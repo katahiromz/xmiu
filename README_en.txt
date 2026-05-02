@@ -17,7 +17,6 @@
     Ctrl+Shift+U        Lower Case
     Alt+Up/Down         Move Line
     Alt+Shift+Up/Down   Copy Line
-    Ctrl+D              Select Word / Next
     Ctrl+A              Select All
     Alt+Drag            Rect Select
     Alt+Z               Word Wrap

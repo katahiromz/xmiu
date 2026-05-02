@@ -17,7 +17,6 @@
     Ctrl+Shift+U        Minuscolo
     Alt+Su/Giù          Sposta riga
     Alt+Shift+Su/Giù    Copia riga
-    Ctrl+D              Sel. parola / Succ.
     Ctrl+A              Seleziona tutto
     Alt+Drag            Sel. rettangolare
     Alt+Z               A capo automatico

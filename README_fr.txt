@@ -17,7 +17,6 @@
     Ctrl+Maj+U          Minuscules
     Alt+Haut/Bas        Déplacer la ligne
     Alt+Maj+Haut/Bas    Copier la ligne
-    Ctrl+D              Sélect. mot / Suivant
     Ctrl+A              Tout sélectionner
     Alt+Glisser         Sélect. rectangulaire
     Alt+Z               Retour à la ligne

@@ -17,7 +17,6 @@
     Ctrl+Shift+U        Kleine letters
     Alt+Up/Down         Regel verplaatsen
     Alt+Shift+Up/Down   Regel kopiëren
-    Ctrl+D              Woord selecteren / Volgende
     Ctrl+A              Alles selecteren
     Alt+Drag            Rechthoekige selectie
     Alt+Z               Tekstterugloop

@@ -27,7 +27,6 @@ xmiu（ペケミウ）は、Windows用のテキストエディタです。
     Ctrl+Shift+U        小文字へ変換
     Alt+Up/Down         行移動
     Alt+Shift+Up/Down   行コピー
-    Ctrl+D              単語選択 / 次を選択
     Ctrl+A              すべて選択
     Alt+Drag            矩形選択
     Alt+Z               折り返し
