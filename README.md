@@ -2,9 +2,9 @@
 
 <img src="image/xmiu-128x128.png" alt="[xmiu アイコン]" />
 
-Kenji様の[kenjinote/miu](https://github.com/kenjinote/miu)からフォークした、普通に使えるテキストエディタです。
+xmiu（ペケミウ）は、Kenji様の[kenjinote/miu](https://github.com/kenjinote/miu)からフォークした、普通に使えるテキストエディタです。
 
-<img src="image/screenshot.png" alt="[xmiu スクリーンショット]" width="474" height="344" />
+<img src="image/screenshot.png" alt="[xmiu スクリーンショット]" width="552" height="465" />
 
 ## 主な特徴 🚩
 
@@ -16,7 +16,6 @@ Kenji様の[kenjinote/miu](https://github.com/kenjinote/miu)からフォーク�
 - ↩↪ 無制限の Undo／Redo
 - ⌨ 豊富なショートカットキーと F1 によるヘルプ表示
 - 🔒 安全なファイル操作と安定性重視の設計
-- 🌙 ダークモードに対応
 
 ## 対応環境
 
